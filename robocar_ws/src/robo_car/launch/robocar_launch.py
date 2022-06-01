@@ -18,6 +18,7 @@
 
 import os
 import pathlib
+import launch
 from launch.substitutions import LaunchConfiguration
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions.path_join_substitution import PathJoinSubstitution
@@ -39,15 +40,32 @@ def generate_launch_description():
     tesla_driver = Node(
         package='webots_ros2_driver',
         executable='driver',
+        additional_env={'WEBOTS_ROBOT_NAME': 'vehicle'},
         output='screen',
         parameters=[
-            {'robot_description': robot_description},
+            {'robot_description': robot_description,
+            # 'set_robot_state_publisher ': True
+            },
         ]
     )
 
     lane_follower = Node(
         package='webots_ros2_tesla',
         executable='lane_follower',
+    )
+
+# camera
+# translation: -2.12 0 0.93
+# rotation 0 0 1 0
+# scale 1 1 1
+
+    robot_state_publisher = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='screen',
+        parameters=[{
+            'robot_description': '<robot name=""><link name=""/></robot>'
+        }],
     )
 
     return LaunchDescription([
@@ -59,4 +77,12 @@ def generate_launch_description():
         webots,
         lane_follower,
         tesla_driver,
+        robot_state_publisher,
+        # This action will kill all nodes once the Webots simulation has exited
+        launch.actions.RegisterEventHandler(
+            event_handler=launch.event_handlers.OnProcessExit(
+                target_action=webots,
+                on_exit=[launch.actions.EmitEvent(event=launch.events.Shutdown())],
+            )
+        )
     ])

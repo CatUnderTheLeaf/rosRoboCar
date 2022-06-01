@@ -3,9 +3,11 @@
 <package format="3">
   <name>robo_car</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="stacy.chaikovska@gmail.com">stacy</maintainer>
-  <license>TODO: License declaration</license>
+  <description>A package to control a car.</description>
+  <maintainer email="catundertheleaf@gmail.com">Stacy</maintainer>
+  <license>Apache License 2.0</license>
+
+  <exec_depend>robot_state_publisher</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

@@ -16,10 +16,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='stacy',
-    maintainer_email='stacy.chaikovska@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer='Stacy',
+    maintainer_email='catundertheleaf@gmail.com',
+    description='A package to control a car.',
+    license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
