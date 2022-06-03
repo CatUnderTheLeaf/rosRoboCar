@@ -3,6 +3,8 @@ Now Robocar uses [Webots ROS2 Interface](https://github.com/cyberbotics/webots_r
 
 ### Installation
 
+> Windows users read first [Instruction for Windows users](https://github.com/CatUnderTheLeaf/rosRoboCar/wiki/Instruction-for-Windows-users) and then continue
+
 Download this repository
 
 ```
