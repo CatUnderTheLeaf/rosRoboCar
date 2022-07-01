@@ -29,11 +29,11 @@ def generate_launch_description():
     )
 
     # check if path_from_image node works
-    # path_from_image = Node(
-    #     package='path_from_image',
-    #     executable='image_warper',
-    #     output='screen',
-    # )
+    path_from_image = Node(
+        package='path_from_image',
+        executable='image_warper',
+        output='screen',
+    )
 
     static_tf2_publisher = Node(
             package='tf2_ros',
@@ -45,7 +45,7 @@ def generate_launch_description():
     return LaunchDescription([
         robot_state_publisher,        
         
-        # path_from_image,
+        path_from_image,
         # static_tf2_publisher,
         
         # This action will kill all nodes once the Webots simulation has exited

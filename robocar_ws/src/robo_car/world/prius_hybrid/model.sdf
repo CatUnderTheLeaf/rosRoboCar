@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<!-- any model changes should be copied to the .gazebo/models directory -->
 <sdf version="1.6">
   <model name="prius_hybrid">
     <pose>0 0 0.03 0 0 0</pose>
@@ -560,7 +561,7 @@
                  * Camera info is published to: /custom_ns/custom_camera/custom_info 
             -->
             <ros>
-              <namespace>demo</namespace>
+              <namespace>vehicle</namespace>
               <argument>image_raw:=image_raw</argument>
               <argument>camera_info:=camera_info</argument>
             </ros>
@@ -981,7 +982,7 @@
     <plugin name='ackermann_drive' filename='libgazebo_ros_ackermann_drive.so'>
 
         <ros>
-          <namespace>demo</namespace>
+          <namespace>vehicle</namespace>
           <argument>cmd_vel:=cmd_demo</argument>
           <argument>odom:=odom_demo</argument>
           <argument>distance:=distance_demo</argument>
