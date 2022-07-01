@@ -375,7 +375,6 @@
   </link>
 
     <link name="sensors">
-      <origin rpy="0 0.05 -1.5707" xyz="0 -0.4 1.4"/>
       <sensor name='front_camera_sensor' type='camera'>
         <update_rate>30</update_rate>
         <always_on>0</always_on>
