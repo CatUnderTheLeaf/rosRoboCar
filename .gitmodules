@@ -1,0 +1,3 @@
+[submodule "robocar_ws/src/path_from_image"]
+	path = robocar_ws/src/path_from_image
+	url = https://github.com/CatUnderTheLeaf/path_from_image.git
