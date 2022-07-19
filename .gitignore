@@ -4,3 +4,5 @@ robocar_ws/log/
 robocar_ws/deps.repos
 .vscode/
 *COLCON_IGNORE
+*.pyc
+.pytest_cache/v/cache/*

@@ -210,88 +210,14 @@
 
       </collision>
     </link>
+-->
 
-
-    <link name="rear_left_wheel">
-      <pose>0.786 1.45 0.3 0 0 0</pose>
-      <inertial>
-        <mass value="11"></mass>
-        <inertia ixx="0.58631238" ixy="0.0" ixz="0.0" iyy="0.33552910" iyz="0.0" izz="0.33552910"/>
-      </inertial>
-
-      <visual name="visual">
-        <pose>0.04 0.0 0.0 0 0 0</pose>
-        <geometry>
-          <mesh filename="package://prius_hybrid/meshes/Hybrid.obj">
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-
-      <collision name="collision">
-        <pose>0.0 0.0 0.0 0 1.5707963267948966 0</pose>
-        <geometry>
-          <sphere radius="0.31265"/>
-        </geometry>
-        <surface>
-          <friction>
-            <ode>
-              <mu>1.1</mu>
-              <mu2>1.1</mu2>
-              <slip1>0.0</slip1>
-              <slip2>0.0</slip2>
-            </ode>
-          </friction>
-          <contact>
-            <ode>
-              <min_depth>0.001</min_depth>
-              <kp>1e9</kp>
-            </ode>
-          </contact>
-        </surface>
-
-      </collision>
+    <link name="rear_left_wheel"> 
     </link>
 
     <link name="rear_right_wheel">
-      <pose>-0.786 1.45 0.3 0 0 0</pose>
-      <inertial>
-        <mass value="11"></mass>
-        <inertia ixx="0.58631238" ixy="0.0" ixz="0.0" iyy="0.33552910" iyz="0.0" izz="0.33552910"/>
-      </inertial>
-      <visual name="visual">
-        <pose>-0.04 0.0 0.0 0 0 0</pose>
-        <geometry>
-          <mesh filename="package://prius_hybrid/meshes/Hybrid.obj">
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-
-      <collision name="collision">
-        <pose>0.0 0.0 0.0 0 1.5707963267948966 0</pose>
-        <geometry>
-          <sphere radius="0.31265"/>
-        </geometry>
-        <surface>
-          <friction>
-            <ode>
-              <mu>1.1</mu>
-              <mu2>1.1</mu2>
-              <slip1>0.0</slip1>
-              <slip2>0.0</slip2>
-            </ode>
-          </friction>
-          <contact>
-            <ode>
-              <min_depth>0.001</min_depth>
-              <kp>1e9</kp>
-            </ode>
-          </contact>
-        </surface>
-      </collision>
     </link>
-
+<!--
     <joint name="front_left_combined_joint" type="revolute">
       <axis xyz="0 0 1"/>
       <limit effort="1000.0" lower="-0.8727" upper="0.8727" velocity="0.5"/> 
@@ -307,42 +233,26 @@
       <axis xyz="0 0 1"/>
       <limit effort="1000.0" lower="-0.8727" upper="0.8727" velocity="0.5"/>  
     </joint>
-
-    <link name="rear_axle">
-      <pose>0 1.45 0.3 0 0 0</pose>
-      <inertial>
-        <mass value="30.0"></mass>
-        <inertia ixx="0.08437499999999999" ixy="0.0" ixz="0.0" iyy="4.64581" iyz="0.0" izz="4.64581"/>
-      </inertial>
-      <visual name="visual">
-        <pose>0.0 0.0 0.0 0 1.5707963267948966 0</pose>
-        <geometry>
-          <cylinder length="1.357" radius="0.075"/>
-        </geometry>
-        <material name="white"/>
-    <color rgba="1 1 1 1"/>
-      </visual>
+ -->
+    <link name="rear_axle">      
     </link>
 
-    <joint type="revolute" name="rear_axle_joint">
+    <joint type="fixed" name="rear_axle_joint">
+      <origin xyz="0 1.45 0.3" rpy="0 0 0"/>
       <parent link="chassis"/>
-      <child link="rear_axle"/>
-      <axis xyz="0 1 0"/>
-      <limit effort="1000.0" lower="-0.05089058524173028" upper="0.05089058524173028" velocity="0.5"/>         
+      <child link="rear_axle"/>   
     </joint>
-    <joint type="revolute" name="rear_left_wheel_joint">
+    <joint type="fixed" name="rear_left_wheel_joint">
+      <origin xyz="0.786 1.45 0.3" rpy="0 0 0"/>     
       <parent link="rear_axle"/>
       <child link="rear_left_wheel"/>
-      <axis xyz="1 0 0"/>
-      <limit effort="1000.0" lower="-0.05089058524173028" upper="0.05089058524173028" velocity="0.5"/>
     </joint>
-    <joint type="revolute" name="rear_right_wheel_joint">
+    <joint type="fixed" name="rear_right_wheel_joint">
+      <origin xyz="-0.786 1.45 0.3" rpy="0 0 0"/>
       <parent link="rear_axle"/>
       <child link="rear_right_wheel"/>
-      <axis xyz="1 0 0"/>
-      <limit effort="1000.0" lower="-0.05089058524173028" upper="0.05089058524173028" velocity="0.5"/>
     </joint>
-
+<!-- 
     <joint name="steering_joint" type="revolute">
       <pose>-0.002 0 0 0 0 0</pose>
       <parent link="chassis"/>
@@ -366,6 +276,15 @@
       so that ros and opencv can operate on the camera frame correctly 
       -->
   <joint name="camera_optical_joint" type="fixed">   
+    <origin xyz="0 0 0" rpy="-1.5707 0 -1.5707"/>
+    <parent link="front_camera_sensor"/>
+    <child link="camera_link_optical"/>
+  </joint>
+
+  <link name="camera_link_optical">
+  </link>
+
+  <joint name="camera_joint" type="fixed">   
     <origin xyz="0 -0.4 1.4" rpy="0 0.05 -1.5707"/>
     <parent link="sensors"/>
     <child link="front_camera_sensor"/>
