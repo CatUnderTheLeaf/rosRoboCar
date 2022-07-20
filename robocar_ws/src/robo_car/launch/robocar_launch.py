@@ -41,7 +41,10 @@ def generate_launch_description():
             {'_camera_frame': 'camera_link_optical',
             '_base_frame': 'chassis',
             'distance_ahead': 10.0,
-            'lane_width': 10.0}
+            'lane_width': 10.0,
+            'image_raw': '/vehicle/front_camera/image_raw',
+            'wrap_img': '/wrap_img',
+            'camera_info': '/vehicle/front_camera/camera_info'}
         ]
     )
 
