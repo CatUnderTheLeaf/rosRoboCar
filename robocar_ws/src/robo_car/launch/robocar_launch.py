@@ -37,6 +37,12 @@ def generate_launch_description():
         package='path_from_image',
         executable='image_warper',
         output='screen',
+        parameters=[
+            {'_camera_frame': 'camera_link_optical',
+            '_base_frame': 'chassis',
+            'distance_ahead': 10.0,
+            'lane_width': 10.0}
+        ]
     )
 
     static_tf2_publisher = Node(
