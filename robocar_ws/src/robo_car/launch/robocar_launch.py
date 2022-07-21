@@ -59,15 +59,28 @@ def generate_launch_description():
         ]
     )
 
+    trans_matrix_getter = Node(
+        package='path_from_image',
+        executable='trans_matrix_getter',
+        output='screen',
+        parameters=[            {
+            '_camera_frame': 'camera_link_optical',
+            '_base_frame': 'chassis',
+            'distance_ahead': 10.0,
+            'lane_width': 10.0,
+            'transf_matrix': '/path/transf_matrix',
+            'camera_info': '/vehicle/front_camera/camera_info'}
+        ]
+    )
 
 
     return LaunchDescription([
         joint_state_publisher_node,
         robot_state_publisher,        
         
-        image_warper,
-        lane_area_drawer,
-        
+        # image_warper,
+        # lane_area_drawer,
+        trans_matrix_getter
         # This action will kill all nodes once the Webots simulation has exited
         # launch.actions.RegisterEventHandler(
         #     event_handler=launch.event_handlers.OnProcessExit(
