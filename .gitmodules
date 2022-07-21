@@ -1,3 +1,6 @@
 [submodule "robocar_ws/src/path_from_image"]
 	path = robocar_ws/src/path_from_image
 	url = https://github.com/CatUnderTheLeaf/path_from_image.git
+[submodule "robocar_ws/src/custom_msgs"]
+	path = robocar_ws/src/custom_msgs
+	url = https://github.com/CatUnderTheLeaf/custom_msgs.git
