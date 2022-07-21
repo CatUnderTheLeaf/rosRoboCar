@@ -32,8 +32,7 @@ def generate_launch_description():
         executable='joint_state_publisher'
     )
 
-    # check if path_from_image node works
-    path_from_image = Node(
+    image_warper = Node(
         package='path_from_image',
         executable='image_warper',
         output='screen',
@@ -48,19 +47,26 @@ def generate_launch_description():
         ]
     )
 
-    static_tf2_publisher = Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            arguments = ['1.67', '0', '1.072', '0', '0', '0', 'base_link', 'camera']
-      )
+    lane_area_drawer = Node(
+        package='path_from_image',
+        executable='lane_area_drawer',
+        output='screen',
+        parameters=[            {
+            'distance_ahead': 10.0,
+            'lane_width': 10.0,
+            'wrap_img': '/wrap_img',
+            'lane_image': '/lane_image'}
+        ]
+    )
+
 
 
     return LaunchDescription([
         joint_state_publisher_node,
         robot_state_publisher,        
         
-        path_from_image,
-        # static_tf2_publisher,
+        image_warper,
+        lane_area_drawer,
         
         # This action will kill all nodes once the Webots simulation has exited
         # launch.actions.RegisterEventHandler(
