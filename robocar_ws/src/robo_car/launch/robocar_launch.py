@@ -32,30 +32,14 @@ def generate_launch_description():
         executable='joint_state_publisher'
     )
 
-    image_warper = Node(
-        package='path_from_image',
-        executable='image_warper',
-        output='screen',
-        parameters=[
-            {'_camera_frame': 'camera_link_optical',
-            '_base_frame': 'chassis',
-            'distance_ahead': 10.0,
-            'lane_width': 10.0,
-            'image_raw': '/vehicle/front_camera/image_raw',
-            'wrap_img': '/wrap_img',
-            'camera_info': '/vehicle/front_camera/camera_info'}
-        ]
-    )
-
     lane_area_drawer = Node(
         package='path_from_image',
         executable='lane_area_drawer',
         output='screen',
-        parameters=[            {
-            'distance_ahead': 10.0,
-            'lane_width': 10.0,
-            'wrap_img': '/wrap_img',
-            'lane_image': '/lane_image'}
+        parameters=[            
+            {'image_raw': '/vehicle/front_camera/image_raw',
+            'lane_image': '/path/lane_image',
+            'transf_matrix': '/path/transf_matrix'}
         ]
     )
 
@@ -63,8 +47,8 @@ def generate_launch_description():
         package='path_from_image',
         executable='trans_matrix_getter',
         output='screen',
-        parameters=[            {
-            '_camera_frame': 'camera_link_optical',
+        parameters=[
+            {'_camera_frame': 'camera_link_optical',
             '_base_frame': 'chassis',
             'distance_ahead': 10.0,
             'lane_width': 10.0,
@@ -73,14 +57,12 @@ def generate_launch_description():
         ]
     )
 
-
     return LaunchDescription([
         joint_state_publisher_node,
         robot_state_publisher,        
         
-        # image_warper,
-        # lane_area_drawer,
-        trans_matrix_getter
+        trans_matrix_getter,
+        lane_area_drawer,
         # This action will kill all nodes once the Webots simulation has exited
         # launch.actions.RegisterEventHandler(
         #     event_handler=launch.event_handlers.OnProcessExit(
