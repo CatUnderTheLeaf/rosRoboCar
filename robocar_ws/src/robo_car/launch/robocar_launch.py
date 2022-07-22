@@ -39,7 +39,8 @@ def generate_launch_description():
         parameters=[            
             {'image_raw': '/vehicle/front_camera/image_raw',
             'lane_image': '/path/lane_image',
-            'transf_matrix': '/path/transf_matrix'}
+            'transf_matrix': '/path/transf_matrix',
+            'img_waypoints': '/path/img_waypoints'} 
         ]
     )
 
