@@ -71,13 +71,41 @@ def generate_launch_description():
         ]
     )
 
+    mock_camera = Node(
+        package='robo_car',
+        executable='mock_camera',
+        output='screen',
+        parameters=[
+            {'camera_info': '/vehicle/front_camera/camera_info',
+            'image_raw': '/vehicle/front_camera/image_raw',
+            }
+        ]
+    )
+
+    markers = Node(
+        package='rviz_markers',
+        executable='marker_publisher',
+        output='screen',
+        parameters=[
+            {'path_waypoints': '/path/path_waypoints',
+            'viz_waypoints': '/visualize/waypoints',
+            }
+        ]
+    )
+
+
+
     return LaunchDescription([
         joint_state_publisher_node,
         robot_state_publisher,        
         
+        mock_camera,
+
         trans_matrix_getter,
         lane_area_drawer,
         path_publisher,
+        markers,
+
         # This action will kill all nodes once the Webots simulation has exited
         # launch.actions.RegisterEventHandler(
         #     event_handler=launch.event_handlers.OnProcessExit(

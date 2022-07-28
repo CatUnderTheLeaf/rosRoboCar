@@ -27,7 +27,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'robocar = robo_car.robocar:main'
+            'robocar = robo_car.robocar:main',
+            'mock_camera = robo_car.mock_camera:main'
         ],
     },
 )
