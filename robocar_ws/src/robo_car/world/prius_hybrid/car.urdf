@@ -13,13 +13,13 @@
         <inertia ixx="2581.13354740" ixy="0.0" ixz="0.0" iyy="591.30846112" iyz="0.0" izz="2681.95008628"/>
       </inertial>
 
-      <visual name="chassis_visual">
+      <!-- <visual name="chassis_visual">
         <geometry>
           <mesh filename="package://prius_hybrid/meshes/Hybrid.obj">
             <scale>0.01 0.01 0.01</scale>            
           </mesh>
         </geometry>
-      </visual>
+      </visual> -->
  
       <!-- <visual name="interior_visual">
         <geometry>
@@ -212,28 +212,30 @@
     </link>
 -->
 
+    <link name="front_right_wheel">
+    </link>
+
+    <link name="front_left_wheel">
+    </link>
+
     <link name="rear_left_wheel"> 
     </link>
 
     <link name="rear_right_wheel">
     </link>
-<!--
-    <joint name="front_left_combined_joint" type="revolute">
-      <axis xyz="0 0 1"/>
-      <limit effort="1000.0" lower="-0.8727" upper="0.8727" velocity="0.5"/> 
-      <origin rpy="0 0 0" xyz="-0.08726646259971647 0 0"/>
+
+    <joint type="fixed" name="front_left_combined_joint">
+      <origin xyz="0.6727335374 -1.41 0.3" rpy="0 0 0"/>
       <parent link="chassis"/>
-      <child link="front_left_wheel"/>
+      <child link="front_left_wheel"/>   
     </joint>
 
-    <joint type="revolute" name="front_right_combined_joint">
-      <origin rpy="0 0 0" xyz="-0.08726646259971647 0 0"/>
+    <joint type="fixed" name="front_right_combined_joint">
+      <origin xyz="-0.8472664626 -1.41 0.3" rpy="0 0 0"/>
       <parent link="chassis"/>
-      <child link="front_right_wheel"/>
-      <axis xyz="0 0 1"/>
-      <limit effort="1000.0" lower="-0.8727" upper="0.8727" velocity="0.5"/>  
+      <child link="front_right_wheel"/>   
     </joint>
- -->
+
     <link name="rear_axle">      
     </link>
 
