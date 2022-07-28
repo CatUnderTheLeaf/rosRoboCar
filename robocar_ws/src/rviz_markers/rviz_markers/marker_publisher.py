@@ -56,7 +56,7 @@ class MarkerPublisher(Node):
     def waypoint_cb(self, msg):
         waypoints = msg.poses
         points = [x.pose.position for x in waypoints]
-        self.publishMarker(self.waypoint_pub, marker_type="line", points=points, color=(0,1,0), frame=msg.header.frame_id)
+        self.publishMarker(self.marker_pub, marker_type="line", points=points, color=(0.0, 1.0, 0.0), frame=msg.header.frame_id)
 
     def publishMarker(self, pub, marker_type, color, angle=0, points=None, frame="base_link"):
         marker = Marker()
