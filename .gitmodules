@@ -4,3 +4,6 @@
 [submodule "robocar_ws/src/custom_msgs"]
 	path = robocar_ws/src/custom_msgs
 	url = https://github.com/CatUnderTheLeaf/custom_msgs.git
+[submodule "robocar_ws/src/raspicam2_node"]
+	path = robocar_ws/src/raspicam2_node
+	url = https://github.com/CatUnderTheLeaf/raspicam2_node.git
