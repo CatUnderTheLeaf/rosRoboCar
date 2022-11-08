@@ -1,59 +1,56 @@
 # rosRoboCar
-Robocar uses ROS2 Humble Hawksbill and Gazebo 11.
+Robocar uses ROS1 Noetic and [DonkeyCar](https://docs.donkeycar.com/). It is a multiple machine project, where a car sends camera images and on computer I can visualize and work with them.
 
-### Installation
+### Installation on PC
+
+ROS1 Noetic should be installed.
 
 > Windows users read first [Instruction for Windows users](https://github.com/CatUnderTheLeaf/rosRoboCar/wiki/Instruction-for-Windows-users) and then continue
 
-Install [Gazebo](https://classic.gazebosim.org/download) (download compatible with ROS2 Humble version 11). Install `gazebo_ros_pkgs` if not installed:
-
 ```
-sudo apt install ros-humble-gazebo-ros-pkgs
-```
-
-Download this repository
-
-```
+# Download this repository
 git clone --recurse-submodules https://github.com/CatUnderTheLeaf/rosRoboCar.git
 
-source /opt/ros/humble/local_setup.bash
+source /opt/ros/noetic/setup.bash
 cd /path/to/robocar_ws
 
 # Install dependencies
 rosdep update
-rosdep install --from-paths src --ignore-src --rosdistro humble
+rosdep install --from-paths src --ignore-src --rosdistro noetic
 
 # Building packages
-# It takes about 18 minutes
-colcon build
+# Add CATKIN_IGNORE to robot_only packages, e.g. raspicam_node
+catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3
 
 # Source this workspace
-source install/local_setup.bash
-
-# Copy Gazebo models, else it will be downloaded from internet without my changes 
-cp -r /src/robo_car/world ~/.gazebo/models/
-```
-### Launch Simulation
-
-Launch a car simulation example based on [Prius Hybrid in Sonoma Raceway](https://app.gazebosim.org/chapulina/fuel/worlds/Prius%20on%20Sonoma%20Raceway)
+source devel/setup.bash
 
 ```
-# In one terminal launch Gazebo with race world and a car in it
-gazebo --verbose src/robo_car/world/robocar.world
 
-# In another terminal launch ros nodes
-ros2 launch robo_car robocar_launch.py
+### Installation on a car
+
+1. A DonkeyCar has RaspberryPi, so first make it [work](https://docs.donkeycar.com/guide/robot_sbc/setup_raspberry_pi/).
+2. Install ROS1 Noetic from [sources](http://wiki.ros.org/noetic/Installation/Source). In the `catkin_make_isolated` step add `-j2` flag, so it will not stuck.
+3. Download this repository.
+4. Unfortunately dependencies can not be resolved, as there are no binary packages. So download in `~/ros_catkin_ws/src` following repositories: [image_transport](https://github.com/ros-perception/image_transport_plugins.git), replace [image_common](https://github.com/ros-perception/image_common.git).
+5. Install `compressed_image_transport`, `image_transport_plugins`, `camera_calibration_parsers`, `camera_info_manager` with a command
+```
+./src/catkin/bin/catkin_make_isolated -j2 --install -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/usr/bin/python3 --install-space /opt/ros/noetic --pkg YOUR_PACKAGE_NAME
 ```
 
-### Real car
+### Running ROS across multiple machines
 
-I have a simple [Donkey car](https://docs.donkeycar.com/) with RaspberryPi and camera. On RaspberryPi I installed [Ubuntu Server 22.04](https://ubuntu.com/download/raspberry-pi) and ROS2 Humble Hawksbill.
+[Connect](http://wiki.ros.org/ROS/Tutorials/MultipleMachines) your car and PC. Don't forget to export `ROS_IP` and `ROS_MASTER_URI`
 
-If you currently have the 2GB version, you can run all your code on a car. But if you have the 1 GB version for Ubuntu Server + ROS2 it is enough, but you’ll probably be limited in the future if you try to start more than a few nodes and launch files. In that case you may run your ROS2 nodes across multiple machines, your PC and your car:
-* make sure you don’t have a firewall blocking your communications on the network. If you have a firewall, allow UDP multicasting, or disable the firewall at least during your first tests.
-* connect all your machines in the same network. <b>This is very important, otherwise they simply won’t be able to find each other</b>.
-* check if the machines can reach out to each other. First, get the IP address of each machine inside the network by running 'hostname -I.' Then ping each other.
-* on one machine 'ros2 run demo_nodes_cpp talker', on another 'ros2 run demo_nodes_py listener'
-* if there is no communication between machines then read [this](https://github.com/CatUnderTheLeaf/rosRoboCar/wiki/How-to-setup-ROS2-Fast-DDS-Discovery-Server) article.
+Now on a car `raspicam_node` can be launched with
+```
+roslaunch raspicam_node camerav2_1280x960.launch
+```
 
-To be continued...
+On PC:
+```
+ rosrun image_view image_view image:=/raspicam_node/image _image_transport:=compressed
+```
+
+
+Next step: camera calibration, sending PWM signals.
