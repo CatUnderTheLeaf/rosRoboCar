@@ -32,8 +32,8 @@ source devel/setup.bash
 1. A DonkeyCar has RaspberryPi, so first make it [work](https://docs.donkeycar.com/guide/robot_sbc/setup_raspberry_pi/).
 2. Install ROS1 Noetic from [sources](http://wiki.ros.org/noetic/Installation/Source). In the `catkin_make_isolated` step add `-j2` flag, so it will not stuck.
 3. Download this repository.
-4. Unfortunately dependencies can not be resolved, as there are no binary packages. So download in `~/ros_catkin_ws/src` following repositories: [image_transport](https://github.com/ros-perception/image_transport_plugins.git), replace [image_common](https://github.com/ros-perception/image_common.git).
-5. Install `compressed_image_transport`, `image_transport_plugins`, `camera_calibration_parsers`, `camera_info_manager` with a command
+4. Unfortunately dependencies can not be resolved, as there are no binary packages. So download in `~/ros_catkin_ws/src` following repositories: [image_transport](https://github.com/ros-perception/image_transport_plugins.git), replace [image_common](https://github.com/ros-perception/image_common.git), [image_pipeline](https://github.com/ros-perception/image_pipeline.git), replace [vision_opencv](https://github.com/ros-perception/vision_opencv.git).
+5. Install `compressed_image_transport`, `image_transport_plugins`, `camera_calibration_parsers`, `camera_info_manager`, `image_geometry`, `image_proc` with a command
 ```
 ./src/catkin/bin/catkin_make_isolated -j2 --install -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/usr/bin/python3 --install-space /opt/ros/noetic --pkg YOUR_PACKAGE_NAME
 ```
