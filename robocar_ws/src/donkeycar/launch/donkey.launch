@@ -1,0 +1,31 @@
+<!-- 
+export ROS_IP=192.168.0.51
+export ROS_MASTER_URI=http://192.168.0.51:11311/
+
+export ROS_IP=192.168.0.133
+export ROS_MASTER_URI=http://192.168.0.51:11311/
+
+ -->
+
+<launch>
+  <arg name="model" default="$(find donkeycar)/config/car.xacro"/>
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+
+<!-- Publish TF messages from URDF -->
+  <node type="joint_state_publisher" pkg="joint_state_publisher" name="joint_state_publisher" output="screen">
+    <!-- <param name="robot_description " value="$(arg robot_description)"/> -->
+    <!-- default rate -->
+    <!-- <param name="rate" value="10"/> -->
+  </node>
+  <node type="robot_state_publisher" pkg="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <!-- <param name="robot_description " value="$(arg robot_description)"/> -->
+    <!-- default rate -->
+    <!-- <param name="publish_frequency" value="50"/> -->
+  </node>
+
+  <!-- launch RVIZ -->
+  <arg name="rvizconfig" default="$(find donkeycar)/config/view.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+
+</launch>
