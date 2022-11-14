@@ -23,9 +23,14 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
     <!-- <param name="publish_frequency" value="50"/> -->
   </node>
 
+  <!-- Steering and throttle of the donkeycar -->
+  <rosparam command="load" file="$(find donkey_actuator)/config/servos.yaml" />
+  <node name="donkey_actuator" pkg="donkey_actuator" type="donkey_actuator_node" />
+
+  
   <!-- launch RVIZ -->
-  <arg name="rvizconfig" default="$(find donkeycar)/config/view.rviz" />
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+  <!-- <arg name="rvizconfig" default="$(find donkeycar)/config/view.rviz" /> -->
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
 
 
 </launch>
