@@ -18,3 +18,9 @@ projection_matrix:
   rows: 3
   cols: 4
   data: [330.37335205, 0, 341.60664969, 0, 0, 329.24319458, 251.8546135, 0, 0, 0, 1, 0]
+roi:
+  x_offset: 0
+  y_offset: 331
+  height: 0
+  width: 0
+  do_rectify: True

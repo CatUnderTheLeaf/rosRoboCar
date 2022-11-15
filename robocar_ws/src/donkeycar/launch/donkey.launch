@@ -25,7 +25,7 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
 
   <!-- Steering and throttle of the donkeycar -->
   <rosparam command="load" file="$(find donkey_actuator)/config/servos.yaml" />
-  <node name="donkey_actuator" pkg="donkey_actuator" type="donkey_actuator_node" />
+  <node name="donkey_actuator_node" pkg="donkey_actuator" type="donkey_actuator_node.py" output="screen"/>
 
   
   <!-- launch RVIZ -->

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # The MIT License (MIT)
 
@@ -22,9 +22,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import Adafruit_PCA9685
+from adafruit_pca9685 import PCA9685
+from board import SCL, SDA
+import busio
+
 import rospy
-# import donkey_msgs.msg
 import geometry_msgs.msg
 
 
@@ -46,8 +48,11 @@ class Actuator:
             raise ActuatorException('Servos not configured')
 
         self.servos = rospy.get_param('servos')
-        self.controller = Adafruit_PCA9685.PCA9685()
-        self.controller.set_pwm_freq(self.servos.get('pwm_frequency', 50))
+        i2c_bus = busio.I2C(SCL, SDA)
+        self.controller = PCA9685(i2c_bus)
+        #self.controller.set_pwm_freq(self.servos.get('pwm_frequency', 50))
+        self.controller.frequency = self.servos.get('pwm_frequency', 50)
+
 
         # send center pulse to throttle servo to calibrate ESC
         self.set_servo_center_(self.servos['throttle'])
@@ -94,7 +99,8 @@ class Actuator:
         self.set_servo_pulse_(servo, servo['center'])
 
     def set_servo_pulse_(self, servo, value):
-        self.controller.set_pwm(servo['channel'], 0, value)
+        self.controller.channels[servo['channel']].duty_cycle = value
+        # self.controller.set_pwm(servo['channel'], 0, value)
         rospy.logdebug('channel: {}, value: {}'.format(servo['channel'], value))
 
     def set_servo_proportional_(self, servo, value):
@@ -110,7 +116,7 @@ class Actuator:
 
 if __name__ == '__main__':
     try:
-        rospy.init_node('donkey_actuator', log_level=rospy.INFO)
+        rospy.init_node('donkey_actuator_node', log_level=rospy.INFO)
         a = Actuator()
         rospy.spin()
     except ActuatorException as e:

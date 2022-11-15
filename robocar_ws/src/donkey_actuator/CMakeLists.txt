@@ -8,7 +8,7 @@ project(donkey_actuator)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  adafruit-pca9685-pip
+#  adafruit_pca9685
   geometry_msgs
   rospy
 )
@@ -204,3 +204,6 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+install(PROGRAMS bin/${PROJECT_NAME}_node
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
