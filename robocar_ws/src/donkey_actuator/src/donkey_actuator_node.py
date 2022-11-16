@@ -22,10 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#from adafruit_pca9685 import PCA9685
-#from board import SCL, SDA
-#import busio
-
 import Adafruit_PCA9685
 
 import rospy
@@ -50,10 +46,6 @@ class Actuator:
             raise ActuatorException('Servos not configured')
 
         self.servos = rospy.get_param('servos')
-        #i2c_bus = busio.I2C(SCL, SDA)
-        #self.controller = PCA9685(i2c_bus)
-        #self.controller.set_pwm_freq(self.servos.get('pwm_frequency', 50))
-        #self.controller.frequency = self.servos.get('pwm_frequency', 50)
         self.controller = Adafruit_PCA9685.PCA9685(address=0x40)
         self.controller.set_pwm_freq(self.servos.get('pwm_frequency', 60))
 
@@ -61,28 +53,10 @@ class Actuator:
         self.set_servo_center_(self.servos['throttle'])
         rospy.sleep(1)
 
-        # initiate subscribers
-        # rospy.Subscriber('donkey/servo_pulse', donkey_msgs.msg.ServoPulse,
-        #                  self.servo_pulse_cb_)
+        # initiate subscriber
         rospy.Subscriber('donkey/drive', geometry_msgs.msg.Twist,
                          self.drive_cb_)
-
-    # def servo_pulse_cb_(self, msg):
-    #     """
-    #     Callback function for the donkey/servo_pulse topic. Intended as a utility
-    #     to help properly configure a servo's range of pulse values.
-    #     The following are an example of finding the steering servo's center, i.e. 333:
-    #     $ rostopic pub /donkey/servo_pulse donkey_msgs/ServoPulse "{name: steering, value: 300}"
-    #     $ rostopic pub /donkey/servo_pulse donkey_msgs/ServoPulse "{name: steering, value: 350}"
-    #     $ rostopic pub /donkey/servo_pulse donkey_msgs/ServoPulse "{name: steering, value: 330}"
-    #     $ rostopic pub /donkey/servo_pulse donkey_msgs/ServoPulse "{name: steering, value: 335}"
-    #     $ rostopic pub /donkey/servo_pulse donkey_msgs/ServoPulse "{name: steering, value: 333}"
-    #     """
-    #     servo = self.servos[msg.name]
-    #     self.set_servo_pulse_(servo, int(msg.value))
-    #     rospy.loginfo('servo: {}, channel: {}, value: {}'.format(
-    #         msg.name, servo['channel'], int(msg.value)))
-
+    
     def drive_cb_(self, msg):
         """
         Callback function for the donkey/drive topic
@@ -102,7 +76,6 @@ class Actuator:
         self.set_servo_pulse_(servo, servo['center'])
 
     def set_servo_pulse_(self, servo, value):
-        #self.controller.channels[servo['channel']].duty_cycle = value
         self.controller.set_pwm(servo['channel'], 0, value)
         rospy.logdebug('channel: {}, value: {}'.format(servo['channel'], value))
 

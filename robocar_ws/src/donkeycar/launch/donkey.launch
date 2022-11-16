@@ -5,6 +5,8 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
 export ROS_IP=192.168.0.133
 export ROS_MASTER_URI=http://192.168.0.51:11311/
 
+token
+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
  -->
 
 <launch>
