@@ -10,6 +10,8 @@ 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
  -->
 
 <launch>
+  <arg name="simulation" default="1" />
+
   <arg name="model" default="$(find donkeycar)/config/car.xacro"/>
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
 
@@ -25,14 +27,39 @@ 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
     <!-- <param name="publish_frequency" value="50"/> -->
   </node>
 
-  <!-- Steering and throttle of the donkeycar -->
-  <rosparam command="load" file="$(find donkey_actuator)/config/servos.yaml" />
-  <node name="donkey_actuator_node" pkg="donkey_actuator" type="donkey_actuator_node.py" output="screen"/>
+  <!-- RUN ON THE CAR -->
+  <group unless="$(arg simulation)">
+    <!-- include camera launch file -->
+    <include file="$(find donkeycar)/launch/camera.launch" />
+    <!-- Steering and throttle of the donkeycar -->
+    <rosparam command="load" file="$(find donkey_actuator)/config/servos.yaml" />
+    <node name="donkey_actuator_node" pkg="donkey_actuator" type="donkey_actuator_node.py" output="screen"/>
+  </group>
+
+
+<!-- RUN ON PC WITHOUT CAR -->
+  <group if="$(arg simulation)">
+    <!-- load mock camera image and info publisher -->
+    <node name="mock_camera" pkg="path_from_image" type="mock_camera.py" output="screen">
+      <param name="image_topic" value="/camera/image/compressed"/>
+      <param name="info_topic" value="/camera/camera_info"/>
+    </node>
+    <!-- node to get transformation matrix -->
+    <node name="trans_matrix_getter" pkg="path_from_image" type="trans_matrix_getter.py" output="screen">
+      <param name="_camera_frame" value="camera_link_optical"/>
+      <param name="_base_frame" value="chassis"/>
+      <param name="distance_ahead" value="10.0"/>
+      <param name="lane_width" value="1.0"/>
+      <param name="matrix_topic" value="/path/transf_matrix"/>
+      <param name="camera_info" value="/camera/camera_info"/>
+    </node>
+    <!-- launch RVIZ -->
+    <!-- <arg name="rvizconfig" default="$(find donkeycar)/config/view.rviz" /> -->
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
+  </group>
 
   
-  <!-- launch RVIZ -->
-  <!-- <arg name="rvizconfig" default="$(find donkeycar)/config/view.rviz" /> -->
-  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
+
 
 
 </launch>

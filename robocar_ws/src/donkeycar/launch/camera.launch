@@ -2,7 +2,7 @@
   <arg name="enable_raw" default="true"/>
   <arg name="enable_imv" default="false"/>
   <arg name="camera_id" default="0"/>
-  <arg name="camera_frame_id" default="raspicam"/>
+  <arg name="camera_frame_id" default="camera_link_optical"/>
   <arg name="camera_name" default="camera"/>
 
   <node type="raspicam_node" pkg="raspicam_node" name="raspicam" output="screen">
