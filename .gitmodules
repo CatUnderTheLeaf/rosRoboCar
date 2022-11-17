@@ -2,9 +2,6 @@
 	path = robocar_ws/src/path_from_image
 	url = https://github.com/CatUnderTheLeaf/path_from_image.git
 	branch = noetic
-[submodule "robocar_ws/src/custom_msgs"]
-	path = robocar_ws/src/custom_msgs
-	url = https://github.com/CatUnderTheLeaf/custom_msgs.git
 [submodule "robocar_ws/src/raspicam_node"]
 	path = robocar_ws/src/raspicam_node
 	url = https://github.com/UbiquityRobotics/raspicam_node.git
