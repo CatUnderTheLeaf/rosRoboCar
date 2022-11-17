@@ -53,6 +53,13 @@ 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
       <param name="matrix_topic" value="/path/transf_matrix"/>
       <param name="camera_info" value="/camera/camera_info"/>
     </node>
+    <!-- node to draw a lane area over an image -->
+    <node name="lane_area_drawer" pkg="path_from_image" type="lane_area_drawer.py" output="screen">
+      <param name="image_raw" value="/camera/image/compressed"/>
+      <param name="lane_image" value="/path/lane_image"/>
+      <param name="matrix_topic" value="/path/transf_matrix"/>
+      <param name="img_waypoints" value="/path/img_waypoints"/>
+    </node>
     <!-- launch RVIZ -->
     <!-- <arg name="rvizconfig" default="$(find donkeycar)/config/view.rviz" /> -->
     <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
