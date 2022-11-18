@@ -13,7 +13,6 @@ Panels:
         - /RobotModel1/Links1/camera_link_optical1
         - /RobotModel1/Links1/chassis1
         - /RobotModel1/Links1/front_camera_sensor1
-        - /RobotModel1/Links1/right_front_wheel1
       Splitter Ratio: 0.5
     Tree Height: 554
   - Class: rviz/Selection
@@ -120,7 +119,7 @@ Visualization Manager:
           Show Trail: false
         right_front_wheel:
           Alpha: 1
-          Show Axes: true
+          Show Axes: false
           Show Trail: false
           Value: true
         right_rear_axle_carrier:
@@ -174,7 +173,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.3499055504798889
+      Distance: 0.7735297083854675
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -190,9 +189,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.04460205137729645
+      Pitch: 0.7153980731964111
       Target Frame: <Fixed Frame>
-      Yaw: 5.495398998260498
+      Yaw: 3.9753968715667725
     Saved: ~
 Window Geometry:
   Displays:

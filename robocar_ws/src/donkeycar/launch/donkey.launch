@@ -5,8 +5,6 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
 export ROS_IP=192.168.0.133
 export ROS_MASTER_URI=http://192.168.0.51:11311/
 
-token
-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
  -->
 
 <launch>
@@ -41,29 +39,39 @@ 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
   <group if="$(arg simulation)">
     <!-- load mock camera image and info publisher -->
     <node name="mock_camera" pkg="path_from_image" type="mock_camera.py" output="screen">
-      <param name="image_topic" value="/camera/image/compressed"/>
-      <param name="info_topic" value="/camera/camera_info"/>
+      <param name="image_topic" value="/raspicam/image/compressed"/>
+      <param name="info_topic" value="/raspicam/camera_info"/>
     </node>
+  </group>
+
+
     <!-- node to get transformation matrix -->
     <node name="trans_matrix_getter" pkg="path_from_image" type="trans_matrix_getter.py" output="screen">
       <param name="_camera_frame" value="camera_link_optical"/>
-      <param name="_base_frame" value="chassis"/>
-      <param name="distance_ahead" value="10.0"/>
-      <param name="lane_width" value="1.0"/>
+      <param name="_base_frame" value="base_footprint"/>
+      <param name="distance_ahead" value="1.54"/>
+      <param name="lane_width" value="2.05"/>
       <param name="matrix_topic" value="/path/transf_matrix"/>
-      <param name="camera_info" value="/camera/camera_info"/>
+      <param name="camera_info" value="/raspicam/camera_info"/>
     </node>
+    <!-- test node that warps an image
+    to get the right values for lane_width and distance_ahead -->
+    <!-- <node name="image_warper" pkg="path_from_image" type="image_warper.py" output="screen">
+      <param name="image_topic" value="/raspicam/image/compressed"/>
+      <param name="warp_image" value="/path/warp_image/compressed"/>
+      <param name="matrix_topic" value="/path/transf_matrix"/>
+    </node> -->
     <!-- node to draw a lane area over an image -->
     <node name="lane_area_drawer" pkg="path_from_image" type="lane_area_drawer.py" output="screen">
-      <param name="image_raw" value="/camera/image/compressed"/>
-      <param name="lane_image" value="/path/lane_image"/>
+      <param name="image_topic" value="/raspicam/image/compressed"/>
+      <param name="lane_image" value="/path/lane_image/compressed"/>
       <param name="matrix_topic" value="/path/transf_matrix"/>
       <param name="img_waypoints" value="/path/img_waypoints"/>
     </node>
     <!-- launch RVIZ -->
-    <!-- <arg name="rvizconfig" default="$(find donkeycar)/config/view.rviz" /> -->
-    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
-  </group>
+    <!-- <arg name="rvizconfig" default="$(find donkeycar)/config/view.rviz" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
+
 
   
 
