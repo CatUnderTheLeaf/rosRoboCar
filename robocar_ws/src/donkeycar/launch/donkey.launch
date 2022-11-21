@@ -64,6 +64,7 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
     <!-- node to draw a lane area over an image -->
     <node name="lane_area_drawer" pkg="path_from_image" type="lane_area_drawer.py" output="screen">
       <param name="image_topic" value="/raspicam/image/compressed"/>
+      <param name="info_topic" value="/raspicam/camera_info"/>
       <param name="lane_image" value="/path/lane_image/compressed"/>
       <param name="matrix_topic" value="/path/transf_matrix"/>
       <param name="img_waypoints" value="/path/img_waypoints"/>
