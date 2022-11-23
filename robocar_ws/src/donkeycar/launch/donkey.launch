@@ -77,6 +77,14 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
       <param name="_camera_frame" value="camera_link_optical"/>
       <param name="_base_frame" value="base_footprint"/>
     </node>
+
+  <node name="controller_node" pkg="controller" type="controller_node.py" output="screen">
+      <param name="kp" value="4.0"/>
+      <param name="ki" value="0.01"/>
+      <param name="kd" value="0.0"/>
+      <param name="velocity" value="0.5"/>
+      <param name="path_waypoints" value="/path/path_waypoints"/>
+  </node>
     <!-- launch RVIZ -->
     <!-- <arg name="rvizconfig" default="$(find donkeycar)/config/view.rviz" />
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
