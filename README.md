@@ -9,9 +9,9 @@ Robocar uses ROS1 Noetic and [DonkeyCar](https://docs.donkeycar.com/). For testi
 
 2. (optional) [Running ROS across multiple machines](https://github.com/CatUnderTheLeaf/rosRoboCar/wiki/Running-ROS-across-multiple-machines)
 
-3. [Camera calibration](https://github.com/CatUnderTheLeaf/rosRoboCar/wiki/Camera-calibration)
+3. [Camera calibration](https://github.com/CatUnderTheLeaf/rosRoboCar/wiki/Camera-calibration). All data should be added to `robocar_ws/src/donkeycar/config/camera_info.yaml`
 
-4. [Calibrate](https://docs.donkeycar.com/guide/calibrate/) PWM signals
+4. Steering and throttle [calibration](https://docs.donkeycar.com/guide/calibrate/). All channels and PWM values should be added to `robocar_ws/src/donkey_actuator/config/servos.yaml` 
 
 ### Launch
 
