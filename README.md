@@ -1,5 +1,7 @@
-# rosRoboCar
-Robocar uses ROS1 Noetic and [DonkeyCar](https://docs.donkeycar.com/). It is a multiple machine project, where a car sends camera images and on computer I can visualize and work with them.
+# rosRoboCar for the "Autonomous Driving Competition''
+[Competition task](https://www.meetup.com/autonomous-robots-berlin/): A real small car has to do at least 3 loops (a long loop to keep the lane or a loop to avoid obstacles) in a row without human intervention.
+
+Robocar uses ROS1 Noetic and [DonkeyCar](https://docs.donkeycar.com/). For testing and training purposes it can be run across multiple machines, when a car sends camera images and on computer I can visualize and work with them.
 
 ### Installation on PC
 
