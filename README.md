@@ -13,6 +13,14 @@ Robocar uses ROS1 Noetic and [DonkeyCar](https://docs.donkeycar.com/). For testi
 
 4. Steering and throttle [calibration](https://docs.donkeycar.com/guide/calibrate/). All channels and PWM values should be added to `robocar_ws/src/donkey_actuator/config/servos.yaml` 
 
+### Nodes and topics
+
+![rqtgraph](https://github.com/CatUnderTheLeaf/rosRoboCar/blob/main/additional_files/rosgraph.png)
+
+### TF frames tree
+
+![frames](https://github.com/CatUnderTheLeaf/rosRoboCar/blob/main/additional_files/tf_frames.jpg)
+
 ### Launch
 
 On PC
