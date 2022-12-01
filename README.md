@@ -11,7 +11,11 @@ Robocar uses ROS1 Noetic and [DonkeyCar](https://docs.donkeycar.com/). For testi
 
 3. [Camera calibration](https://github.com/CatUnderTheLeaf/rosRoboCar/wiki/Camera-calibration). All data should be added to `robocar_ws/src/donkeycar/config/camera_info.yaml`
 
-4. Steering and throttle [calibration](https://docs.donkeycar.com/guide/calibrate/). All channels and PWM values should be added to `robocar_ws/src/donkey_actuator/config/servos.yaml` 
+4. Steering and throttle [calibration](https://docs.donkeycar.com/guide/calibrate/). All channels and PWM values should be added to `robocar_ws/src/donkey_actuator/config/servos.yaml`
+
+5. [Setup](https://github.com/CatUnderTheLeaf/rosRoboCar/wiki/Setup-joystick) joystick control
+
+6. [Record](https://github.com/CatUnderTheLeaf/rosRoboCar/wiki/Make-bagfiles) bagfiles
 
 ### Nodes and topics
 
@@ -25,7 +29,11 @@ Robocar uses ROS1 Noetic and [DonkeyCar](https://docs.donkeycar.com/). For testi
 
 On PC
 ```
+# mock camera will publish only one image with 30Hz rate
 roslaunch donkeycar donkey.launch simulation:=1
+
+# to play recorded bag
+roslaunch donkeycar donkey.launch simulation:=1 playbag:=1
 ```
 
 On a car
