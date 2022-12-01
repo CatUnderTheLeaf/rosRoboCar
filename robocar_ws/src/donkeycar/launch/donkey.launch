@@ -9,6 +9,7 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
 
 <launch>
   <arg name="simulation" default="1" />
+  <arg name="playbag" default="1" />
 
   <arg name="model" default="$(find donkeycar)/config/car.xacro"/>
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
@@ -41,21 +42,28 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
     <node name="mock_camera" pkg="path_from_image" type="mock_camera.py" output="screen">
       <param name="image_topic" value="/raspicam/image/compressed"/>
       <param name="info_topic" value="/raspicam/camera_info"/>
+      <param name="playbag" value="$(arg playbag)"/>
     </node>
-    <!-- rosrun image_transport republish theora in:=camera/image raw out:=camera/image_decompressed
+    <!-- 
     <node name="republish" pkg="image_transport" type="republish" output="screen">
       <param name="image_topic" value="/raspicam/image/compressed"/>
       <param name="info_topic" value="/raspicam/camera_info"/>
     </node> -->
+
+    
+  </group>
+
+  <group if="$(arg playbag)">
+    <node pkg="rosbag" type="play" name="rosbag" required="true" args="$(find path_from_image)/bagfiles/subset.bag"/>
   </group>
 
 
-  <node name="undistort_node" pkg="path_from_image" type="undistort_node" output="screen">
+  <!-- <node name="undistort_node" pkg="path_from_image" type="undistort_node" output="screen">
   <param name="image_transport" value="compressed"/>
       <param name="image_topic" value="/raspicam/image"/>
       <param name="info_topic" value="/raspicam/camera_info"/>
       <param name="undistort_image_topic" value="/raspicam/undst_image"/>
-    </node>
+    </node> -->
   
   <!-- node to get transformation matrix -->
   <node name="trans_matrix_getter" pkg="path_from_image" type="trans_matrix_getter.py" output="screen">
