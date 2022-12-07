@@ -8,20 +8,20 @@
 # enable_button: 4  # L2 shoulder button
 # enable_turbo_button: 10  # L1 shoulder button
 
-joy_teleop:
-  ros__parameters:
-
-    walk:
-      type: topic
-      interface_type: geometry_msgs/msg/TwistStamped
-      topic_name: donkey/drive
-      deadman_buttons: [4]
-      axis_mappings:
-        linear-x:
-          axis: 4
-          scale: 0.5
-          offset: -0.03
-        angular-z:
-          axis: 0
-          scale: 0.5
-          offset: 0
+teleop:
+  walk:
+    type: topic
+    message_type: geometry_msgs/Twist
+    topic_name: donkey/drive
+    deadman_buttons: [4]
+    axis_mappings:
+      -
+        axis: 4
+        scale: 1
+        offset: -0.03
+        target: linear.x
+      -
+        axis: 0
+        scale: 1
+        offset: 0
+        target: angular.z

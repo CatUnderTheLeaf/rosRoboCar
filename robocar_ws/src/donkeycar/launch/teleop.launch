@@ -11,8 +11,8 @@
     <remap from="joy" to="$(arg joy_topic)" />
   </node>
   
-  <node pkg="joy_teleop" name="joy_teleop" type="joy_teleop.py">
-    <rosparam command="load" file="$(arg config_filepath)" />
+  <rosparam command="load" file="$(arg config_filepath)" />
+  <node pkg="joy_teleop" name="joy_teleop" type="joy_teleop.py">    
     <remap from="joy" to="$(arg joy_topic)" />
   </node>
 
