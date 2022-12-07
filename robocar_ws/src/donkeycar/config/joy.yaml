@@ -1,9 +1,27 @@
-axis_linear: 4
-scale_linear: 0.7
-scale_linear_turbo: 1.5
+# axis_linear: 4
+# scale_linear: 0.7
+# scale_linear_turbo: 1.5
 
-axis_angular: 0
-scale_angular: 0.4
+# axis_angular: 0
+# scale_angular: 0.4
 
-enable_button: 4  # L2 shoulder button
-enable_turbo_button: 10  # L1 shoulder button
+# enable_button: 4  # L2 shoulder button
+# enable_turbo_button: 10  # L1 shoulder button
+
+joy_teleop:
+  ros__parameters:
+
+    walk:
+      type: topic
+      interface_type: geometry_msgs/msg/TwistStamped
+      topic_name: donkey/drive
+      deadman_buttons: [4]
+      axis_mappings:
+        linear-x:
+          axis: 4
+          scale: 0.5
+          offset: -0.03
+        angular-z:
+          axis: 0
+          scale: 0.5
+          offset: 0
