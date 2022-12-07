@@ -8,8 +8,8 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
  -->
 
 <launch>
-  <arg name="simulation" default="1" />
-  <arg name="playbag" default="1" />
+  <arg name="simulation" default="0" />
+  <arg name="playbag" default="0" />
 
   <arg name="model" default="$(find donkeycar)/config/car.xacro"/>
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
@@ -32,7 +32,9 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
     <include file="$(find donkeycar)/launch/camera.launch" />
     <!-- Steering and throttle of the donkeycar -->
     <rosparam command="load" file="$(find donkey_actuator)/config/servos.yaml" />
-    <node name="donkey_actuator_node" pkg="donkey_actuator" type="donkey_actuator_node.py" output="screen"/>
+<!--    
+<node name="donkey_actuator_node" pkg="donkey_actuator" type="donkey_actuator_node.py" output="screen"/>
+  -->
   </group>
 
 
