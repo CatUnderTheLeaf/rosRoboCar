@@ -1,0 +1,71 @@
+
+<launch>
+  <arg name="model" default="$(find donkeycar)/config/car.xacro"/>
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+
+<!-- Publish TF messages from URDF -->
+  <node type="joint_state_publisher" pkg="joint_state_publisher" name="joint_state_publisher" output="screen">
+    <!-- <param name="robot_description " value="$(arg robot_description)"/> -->
+    <!-- default rate -->
+    <!-- <param name="rate" value="10"/> -->
+  </node>
+  <node type="robot_state_publisher" pkg="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <!-- <param name="robot_description " value="$(arg robot_description)"/> -->
+    <!-- default rate -->
+    <!-- <param name="publish_frequency" value="50"/> -->
+  </node>
+
+
+
+<!-- <node name="undistort_node" pkg="path_from_image" type="undistort_node" output="screen">
+  <param name="image_transport" value="compressed"/>
+      <param name="image_topic" value="/raspicam/image"/>
+      <param name="info_topic" value="/raspicam/camera_info"/>
+      <param name="undistort_image_topic" value="/raspicam/undst_image"/>
+    </node> -->
+  
+  <!-- node to get transformation matrix -->
+  <node name="trans_matrix_getter" pkg="path_from_image" type="trans_matrix_getter.py" output="screen">
+    <param name="_camera_frame" value="camera_link_optical"/>
+    <param name="_base_frame" value="base_footprint"/>
+    <param name="distance_ahead" value="2.62"/>
+    <param name="lane_width" value="3.50"/>
+    <param name="matrix_topic" value="/path/transf_matrix"/>
+    <param name="camera_info" value="/raspicam/camera_info"/>
+  </node>
+  <!-- test node that warps an image
+  to get the right values for lane_width and distance_ahead -->
+  <!-- <node name="image_warper" pkg="path_from_image" type="image_warper.py" output="screen">
+    <param name="image_topic" value="/raspicam/image/compressed"/>
+    <param name="warp_image" value="/path/warp_image/compressed"/>
+    <param name="matrix_topic" value="/path/transf_matrix"/>
+  </node> -->
+  <!-- node to draw a lane area over an image -->
+  <node name="lane_area_drawer" pkg="path_from_image" type="lane_area_drawer.py" output="screen">
+    <param name="image_topic" value="/raspicam/image/compressed"/>
+    <param name="info_topic" value="/raspicam/camera_info"/>
+    <param name="lane_image" value="/path/lane_image/compressed"/>
+    <param name="matrix_topic" value="/path/transf_matrix"/>
+    <param name="img_waypoints" value="/path/img_waypoints"/>
+  </node>
+
+<!-- img points to path in robots frame -->
+  <node name="path_publisher" pkg="path_from_image" type="path_publisher.py" output="screen">
+    <param name="info_topic" value="/raspicam/camera_info"/>
+    <param name="img_waypoints" value="/path/img_waypoints"/>
+    <param name="path_waypoints" value="/path/path_waypoints"/>
+    <param name="_camera_frame" value="camera_link_optical"/>
+    <param name="_base_frame" value="base_footprint"/>
+  </node>
+
+    <!-- path to cmd_vel -->
+  <node name="controller_node" pkg="controller" type="controller_node.py" output="screen">
+      <param name="kp" value="4.0"/>
+      <param name="ki" value="0.01"/>
+      <param name="kd" value="0.0"/>
+      <param name="velocity" value="0.5"/>
+      <param name="path_waypoints" value="/path/path_waypoints"/>
+  </node>
+
+  
+</launch>

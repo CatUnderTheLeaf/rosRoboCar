@@ -1,0 +1,36 @@
+<!-- 
+export ROS_IP=192.168.0.51
+export ROS_MASTER_URI=http://192.168.0.51:11311/
+
+export ROS_IP=192.168.0.133
+export ROS_MASTER_URI=http://192.168.0.51:11311/
+
+ -->
+
+<launch>
+
+<!-- RUN ON PC WITHOUT CAR -->
+  
+    <!-- load mock camera image and info publisher -->
+    <node name="mock_camera" pkg="path_from_image" type="mock_camera.py" output="screen">
+      <param name="image_topic" value="/raspicam/image/compressed"/>
+      <param name="info_topic" value="/raspicam/camera_info"/>
+      <param name="playbag" value="1"/>
+    </node>
+    <!-- 
+    <node name="republish" pkg="image_transport" type="republish" output="screen">
+      <param name="image_topic" value="/raspicam/image/compressed"/>
+      <param name="info_topic" value="/raspicam/camera_info"/>
+    </node> -->
+  
+    <node pkg="rosbag" type="play" name="rosbag" required="true" args="$(find path_from_image)/bagfiles/subset.bag"/>
+
+    <!-- Steering and throttle of the donkeycar -->
+    <rosparam command="load" file="$(find donkey_actuator)/config/servos.yaml" />   
+    <node name="donkey_actuator_node" pkg="donkey_actuator" type="donkey_actuator_node.py" output="screen"/>
+    
+    <!-- include lane-keeping launch file -->
+    <include file="$(find donkeycar)/launch/lanekeep.launch" />
+
+
+</launch>
