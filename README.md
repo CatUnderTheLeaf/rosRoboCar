@@ -36,8 +36,8 @@ Robocar uses ROS1 Noetic and [DonkeyCar](https://docs.donkeycar.com/). For testi
      - [x] add `joint_state_publisher` and `robot_state_publisher` nodes to the launch file to publish static TF messages. Transfomation between `base_footprint` and `camera_link_optical` should be possible
   - [x] send image from camera
      - [x] `raspicam_node` publishes `ImageCompressed` and `CameraInfo` messages with 30Hz rate. With a flag can also publish `ImageRaw`
-  - [ ] image processing
-     - [ ] make undistortion faster as 20Hz, because it slows down everything else
+  - [x] image processing
+     - [x] make undistortion faster as 20Hz, because it slows down everything else
   - [ ] Lane detection, 2 variants
      - [ ] Neural network
         - [ ] get lots of images (bag)
@@ -45,7 +45,7 @@ Robocar uses ROS1 Noetic and [DonkeyCar](https://docs.donkeycar.com/). For testi
      - [ ] Traditional Computer Vision approach
         - [x] get matrices for transformation into 'top-view'
         - [x] make a binary treshold
-        - [x] with a sliding window get points of lanes
+        - [ ] with a sliding window get points of lanes, make it faster then 25 Hz
         - [ ] lanes are not always seen in the image
         - [x] fit polynomials
         - [x] draw a filled polygon
