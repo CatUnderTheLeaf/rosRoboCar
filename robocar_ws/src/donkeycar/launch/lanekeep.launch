@@ -5,24 +5,10 @@
 
 <!-- Publish TF messages from URDF -->
   <node type="joint_state_publisher" pkg="joint_state_publisher" name="joint_state_publisher" output="screen">
-    <!-- <param name="robot_description " value="$(arg robot_description)"/> -->
-    <!-- default rate -->
-    <!-- <param name="rate" value="10"/> -->
   </node>
   <node type="robot_state_publisher" pkg="robot_state_publisher" name="robot_state_publisher" output="screen">
-    <!-- <param name="robot_description " value="$(arg robot_description)"/> -->
-    <!-- default rate -->
-    <!-- <param name="publish_frequency" value="50"/> -->
+
   </node>
-
-
-
-<!-- <node name="undistort_node" pkg="path_from_image" type="undistort_node" output="screen">
-  <param name="image_transport" value="compressed"/>
-      <param name="image_topic" value="/raspicam/image"/>
-      <param name="info_topic" value="/raspicam/camera_info"/>
-      <param name="undistort_image_topic" value="/raspicam/undst_image"/>
-    </node> -->
   
   <!-- node to get transformation matrix -->
   <node name="trans_matrix_getter" pkg="path_from_image" type="trans_matrix_getter.py" output="screen">
@@ -42,7 +28,7 @@
   </node> -->
   <!-- node to draw a lane area over an image -->
   <node name="lane_area_drawer" pkg="path_from_image" type="lane_area_drawer.py" output="screen">
-    <param name="image_topic" value="/raspicam/image/compressed"/>
+    <param name="image_topic" value="/raspicam/image_rect_color/compressed"/>
     <param name="info_topic" value="/raspicam/camera_info"/>
     <param name="lane_image" value="/path/lane_image/compressed"/>
     <param name="matrix_topic" value="/path/transf_matrix"/>

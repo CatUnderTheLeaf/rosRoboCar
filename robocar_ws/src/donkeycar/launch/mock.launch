@@ -20,12 +20,20 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
       <param name="info_topic" value="/raspicam/camera_info"/>
       <param name="playbag" value="$(arg playbag)"/>
     </node>
-    <!-- 
-    <node name="republish" pkg="image_transport" type="republish" output="screen">
-      <param name="image_topic" value="/raspicam/image/compressed"/>
-      <param name="info_topic" value="/raspicam/camera_info"/>
+
+    <!-- republish to image raw, if needed and rectify image -->
+    <node name="republish" pkg="image_transport" type="republish" args="compressed in:=/raspicam/image raw out:=/raspicam/image" />
+    <group ns="raspicam">
+    <node name="rectify_image_proc" pkg="image_proc" type="image_proc" output="screen">
+      <param name="image_transport" value="raw"/>
+      <remap from="image_raw" to="image" />
+    </node>
+    <!-- <node pkg="image_view" name="image_raw" type="image_view" output="screen">
+    </node>
+    <node pkg="image_view" name="image_rect" type="image_view" output="screen">
+        <remap from="image" to="image_rect_color" />
     </node> -->
-    
+    </group>
     <!-- include lane-keeping launch file -->
     <include file="$(find donkeycar)/launch/lanekeep.launch" />
 
