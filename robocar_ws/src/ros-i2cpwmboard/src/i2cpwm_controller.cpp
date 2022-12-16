@@ -170,13 +170,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <fcntl.h>
 #include <errno.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <linux/i2c-dev.h>
+
+extern "C" {
+    #include <unistd.h>
+    #include <fcntl.h>
+    #include <sys/ioctl.h>
+    #include <linux/i2c-dev.h>
+    #include <i2c/smbus.h>
+}
 
 #include <ros/ros.h>
 #include <ros/console.h>
