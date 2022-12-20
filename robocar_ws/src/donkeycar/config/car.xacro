@@ -230,7 +230,8 @@ limitations under the License.
       <xacro:null_inertial/>
     </link>
 
-    <joint name="${lr_prefix}_steering_joint" type="revolute">
+    <joint name="${lr_prefix}_steering_joint" type="fixed">
+    <!-- <joint name="${lr_prefix}_steering_joint" type="revolute"> -->
       <parent link="${lr_prefix}_steering_link"/>
       <child link="${lr_prefix}_${fr_prefix}_axle_carrier"/>
       <axis xyz="0 0 1"/>
@@ -337,6 +338,29 @@ limitations under the License.
     </joint>
 
     <link name="front_camera_sensor">
+      <inertial>
+        <mass value="0.001"/>
+        <origin xyz="0 0 0" rpy=" 0 0 0"/>
+        <inertia
+            ixx="1e-6" ixy="0" ixz="0"
+            iyy="1e-6" iyz="0"
+            izz="1e-6"
+        />
+      </inertial>
+
+      <collision name='camera_collision'>
+        <origin xyz="0 0 0" rpy=" 0 0 0"/> 
+        <geometry>
+          <box size="0.05 0.05 0.05"/>
+        </geometry>
+      </collision>
+
+      <visual name='camera_visual'>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.05 0.05 0.05"/>
+        </geometry>
+      </visual>
     </link>
 
     <joint name="camera_joint" type="fixed">   
@@ -356,6 +380,8 @@ limitations under the License.
         <parent link="front_camera_sensor"/>
         <child link="camera_link_optical"/>
     </joint>
+
+
 
 </robot>
 
@@ -411,3 +437,31 @@ limitations under the License.
       <rpyOffsets>0 0 0</rpyOffsets>
     </plugin>
   </gazebo> -->
+
+  
+<!--
+  <gazebo>
+    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <legacyMode>false</legacyMode>
+      <alwaysOn>true</alwaysOn>
+      <updateRate>10</updateRate>
+      <leftJoint>left_wheel_hinge</leftJoint>
+      <rightJoint>right_wheel_hinge</rightJoint>
+      <wheelSeparation>0.3</wheelSeparation>
+      <wheelDiameter>0.24</wheelDiameter>
+      <torque>10</torque>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <robotBaseFrame>robot_footprint</robotBaseFrame>
+      <publishWheelTF>false</publishWheelTF>
+      <publishWheelJointState>false</publishWheelJointState>
+      <rosDebugLevel>na</rosDebugLevel>
+      <wheelAcceleration>0</wheelAcceleration>
+      <wheelTorque>5</wheelTorque>
+      <odometrySource>world</odometrySource>
+      <publishTf>1</publishTf>
+      <publishOdomTF>true</publishOdomTF>
+    </plugin>
+  </gazebo>
+-->

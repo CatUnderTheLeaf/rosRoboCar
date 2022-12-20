@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<robot name="robocar" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find donkeycar)/config/car.xacro" />
+
+  <!-- RGBD Camera -->
+  <gazebo reference="front_camera_sensor">
+    <sensor type="camera" name="camera">
+    <update_rate>30.0</update_rate>
+    <camera>
+      <horizontal_fov>1.583800836</horizontal_fov>  <!-- focal_length = width_ / (2.0 * tan(HFOV/2.0)) -->  
+      <image>
+          <width>410</width>
+          <height>308</height>
+          <format>R8G8B8</format>
+      </image>      
+      <clip>
+          <near>0.02</near>
+          <far>10</far>
+      </clip>
+    </camera>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>30.0</updateRate>
+      <cameraName></cameraName>
+      <frameName>camera_link_optical</frameName>                   
+      <imageTopicName>raspicam/image</imageTopicName>
+      <cameraInfoTopicName>raspicam/camera_info</cameraInfoTopicName>              
+      <focalLength>202.35126146</focalLength>
+        <CxPrime>206.80143037</CxPrime>
+        <Cx>206.80143037</Cx>
+        <Cy>153.32497517</Cy>
+        <distortionK1>-3.28296006e-01</distortionK1>
+        <distortionK2>1.19443754e-01</distortionK2>
+        <distortionK3>-2.06502314e-02</distortionK3>
+        <distortionT1>-1.85799276e-04</distortionT1>
+        <distortionT2>8.39998127e-04</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  
+</robot>
