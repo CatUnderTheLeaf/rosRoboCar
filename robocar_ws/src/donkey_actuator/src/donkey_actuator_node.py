@@ -186,7 +186,7 @@ class DkLowLevelCtrl():
         self.send_servo_msg()
 
     def send_servo_msg(self):
-        for actuator_name, servo_obj in self.actuators.iteritems():
+        for actuator_name, servo_obj in self.actuators.items():
             self._servo_msg.servos[servo_obj.id-1].servo = servo_obj.id
             self._servo_msg.servos[servo_obj.id-1].value = servo_obj.value_out
             rospy.loginfo("Sending to %s command %d"%(actuator_name, servo_obj.value_out))
