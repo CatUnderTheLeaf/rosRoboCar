@@ -3,22 +3,24 @@
   <arg name="config_filepath" default="$(find donkeycar)/config/joy.yaml" />
   <arg name="joy_topic" default="joy" />
   <arg name="servo_topic" default="servos_proportional" />
+
+  <node pkg="i2cpwm_board" name="i2cpwm_board_node" type="i2cpwm_board" output="screen" />
   
-  <!-- <node pkg="joy" type="joy_node" name="joy_node">
+  <node pkg="joy" type="joy_node" name="joy_node">
     <param name="dev" value="$(arg joy_dev)" />
     <param name="deadzone" value="0.3" />
     <param name="autorepeat_rate" value="20" />
     <remap from="joy" to="$(arg joy_topic)" />
-  </node> -->
+  </node>
   
   <rosparam command="load" file="$(arg config_filepath)" />
   <rosparam command="load" file="$(find donkey_actuator)/config/servos.yaml" />
-  <node pkg="donkeycar" name="joy_teleop_node" type="joy_teleop_node.py" output="screen">    
+  <node pkg="donkeycar" name="joy_teleop_node" type="joy_teleop_node.py" output="screen" required="true">    
     <remap from="joy" to="$(arg joy_topic)" />
     <remap from="servo_topic" to="$(arg servo_topic)" />
   </node>
 
-  <node pkg="i2cpwm_board" name="i2cpwm_board_node" type="i2cpwm_board" output="screen" />
+  <!--node pkg="i2cpwm_board" name="i2cpwm_board_node" type="i2cpwm_board" output="screen" /-->
   <!-- Steering and throttle of the donkeycar -->
   
   <!-- <node name="donkey_actuator_node" pkg="donkey_actuator" type="donkey_actuator_node.py" output="screen"/> -->

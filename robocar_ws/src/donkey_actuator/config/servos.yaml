@@ -1,24 +1,11 @@
-# servos:
-#   pwm_frequency: 60
-#   throttle:
-#     channel: 0
-#     center: 330
-#     direction: 1
-#     range: 200
-#   steering:
-#     channel: 1
-#     center: 400
-#     direction: 1
-#     range: 50
-
 servos:
 # throttle
   - servo: 1
-    center: 300
+    center: 370
     range: 100
     direction: 1
 #  steering
   - servo: 2
     center: 340
     range: 80
-    direction: -1
+    direction: 1

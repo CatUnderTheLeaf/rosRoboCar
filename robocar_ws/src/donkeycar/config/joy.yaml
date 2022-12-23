@@ -1,5 +1,6 @@
 axis_linear: 4
 axis_angular: 0
+stop_button: 4
 # rostopic pub -1 /servos_absolute i2cpwm_board/ServoArray "{servos:[{servo: 1, value: 300}]}"
 
 # scale_angular: 0.4
