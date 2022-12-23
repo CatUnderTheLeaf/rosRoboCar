@@ -1,27 +1,47 @@
-# axis_linear: 4
+axis_linear: 4
+axis_angular: 0
+# rostopic pub -1 /servos_absolute i2cpwm_board/ServoArray "{servos:[{servo: 1, value: 300}]}"
+
+# scale_angular: 0.4
+
 # scale_linear: 0.7
 # scale_linear_turbo: 1.5
-
-# axis_angular: 0
-# scale_angular: 0.4
 
 # enable_button: 4  # L2 shoulder button
 # enable_turbo_button: 10  # L1 shoulder button
 
-teleop:
-  walk:
-    type: topic
-    message_type: geometry_msgs/Twist
-    topic_name: donkey/drive
-    deadman_buttons: [4]
-    axis_mappings:
-      -
-        axis: 4
-        scale: 1
-        offset: -0.03
-        target: linear.x
-      -
-        axis: 0
-        scale: 1
-        offset: 0
-        target: angular.z
+# teleop:
+#   drive:
+#     type: topic
+#     message_type: geometry_msgs/Twist
+#     topic_name: donkey/drive
+#     deadman_buttons: [4]
+#     axis_mappings:
+#       -
+#         axis: 4
+#         scale: 1
+#         offset: -0.03
+#         target: linear.x
+#       -
+#         axis: 0
+#         scale: 1
+#         offset: 0
+#         target: angular.z
+
+# teleop:
+#   drive:
+#     type: topic
+#     message_type: i2cpwm_board/ServoArray
+#     topic_name: servos_absolute
+#     deadman_buttons: [4]
+#     axis_mappings:
+#       -
+#         axis: 4
+#         scale: 1
+#         offset: -0.03
+#         target: linear.x
+#       -
+#         axis: 0
+#         scale: 1
+#         offset: 0
+#         target: angular.z
