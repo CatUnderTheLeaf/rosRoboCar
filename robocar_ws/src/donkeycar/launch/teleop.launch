@@ -15,14 +15,12 @@
   
   <rosparam command="load" file="$(arg config_filepath)" />
   <rosparam command="load" file="$(find donkey_actuator)/config/servos.yaml" />
+
+  <!-- when this node shutdowns it takes down all of the other nodes in the launch file  -->
+  <!-- to shutdown press L1 button on joystick (button with index=4 in joy message) or whatevere button is in servos.yaml -->
   <node pkg="donkeycar" name="joy_teleop_node" type="joy_teleop_node.py" output="screen" required="true">    
     <remap from="joy" to="$(arg joy_topic)" />
     <remap from="servo_topic" to="$(arg servo_topic)" />
   </node>
-
-  <!--node pkg="i2cpwm_board" name="i2cpwm_board_node" type="i2cpwm_board" output="screen" /-->
-  <!-- Steering and throttle of the donkeycar -->
-  
-  <!-- <node name="donkey_actuator_node" pkg="donkey_actuator" type="donkey_actuator_node.py" output="screen"/> -->
 
 </launch>

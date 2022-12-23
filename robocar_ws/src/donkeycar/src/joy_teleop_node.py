@@ -10,11 +10,7 @@ class JoyToServoPublisher():
 
     def __init__(self):
         servo_config = rospy.get_param("servos")
-        rospy.loginfo(servo_config)
         self.config_servos(servo_config)
-
-        #rospy.wait_for_service('stop_servos')
-        #self.stop = rospy.ServiceProxy('stop_servos', StopServos)
 
         self.steering = 0
         self.steering_servo = servo_config[1]['servo']
@@ -38,8 +34,6 @@ class JoyToServoPublisher():
              'servo_topic',
              ServoArray,
              queue_size=1)
-
-     #   rospy.on_shutdown(self.stop)
 
         rospy.spin()
 
@@ -66,7 +60,6 @@ class JoyToServoPublisher():
             msg = ServoArray()
 
             cur_throttle = round(data.axes[self.throttle_axis], 2)
-          #  rospy.loginfo(cur_throttle)
             if (abs(cur_throttle-self.throttle) > self.offset):
                 self.throttle = cur_throttle
                 serv = Servo()
@@ -88,7 +81,6 @@ class JoyToServoPublisher():
         """
         Turn off servos when shutting down
         """
-        #rospy.loginfo("hahah")
         rospy.wait_for_service('stop_servos')
         try:
             stop = rospy.ServiceProxy('stop_servos', StopServos)
