@@ -18,7 +18,7 @@
     <remap from="servo_topic" to="$(arg servo_topic)" />
   </node>
 
-  <node pkg="i2cpwm_board" name="i2cpwm_board_node" type="i2cpwm_board" output="screen" >
+  <node pkg="i2cpwm_board" name="i2cpwm_board_node" type="i2cpwm_board" output="screen" />
   <!-- Steering and throttle of the donkeycar -->
   
   <!-- <node name="donkey_actuator_node" pkg="donkey_actuator" type="donkey_actuator_node.py" output="screen"/> -->
