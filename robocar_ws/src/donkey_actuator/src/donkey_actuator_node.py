@@ -12,20 +12,18 @@ class DonkeyActuator():
         servo_config = rospy.get_param("servos")
         self.config_servos(servo_config)
 
-        self.steering = 0
+        self.offset = 0.1
+
+        self.steering = -1
         self.steering_servo = servo_config[1]['servo']
 
-        self.throttle = 0
+        self.throttle = -1
         self.throttle_servo = servo_config[0]['servo']
-        # init car with zero values
-        self.publish_servo(self.throttle, self.steering)
-
-        self.offset = 0.1
 
         # self.stop_button = rospy.get_param("stop_button")
 
         self.twist_sub = rospy.Subscriber(
-             'donkey/drive',
+             'drive_topic',
              Twist,
              self.twist_callback,
              queue_size=1)
@@ -34,6 +32,9 @@ class DonkeyActuator():
              'servo_topic',
              ServoArray,
              queue_size=1)
+
+        # init car with zero values
+        self.publish_servo(0, 0)
 
         rospy.spin()
 
@@ -69,7 +70,7 @@ class DonkeyActuator():
         """            
         cur_throttle = round(data.linear.x, 2)
         cur_steer = round(data.angular.z, 2)
-
+        rospy.loginfo(f"throttle {cur_throttle}, steering {cur_steer}")
         self.publish_servo(cur_throttle, cur_steer)           
 
     def publish_servo(self, cur_throttle, cur_steer):
@@ -96,6 +97,7 @@ class DonkeyActuator():
             serv.value = cur_steer
             msg.servos.append(serv)
         if (len(msg.servos)>0):
+            rospy.loginfo(msg)
             self.servo_pub.publish(msg)
 
 def main(args):

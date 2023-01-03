@@ -11,6 +11,7 @@ import curses
 import rospy
 
 from i2cpwm_board.srv import StopServos
+from i2cpwm_board.msg import ServoArray, Servo
 
 class TextWindow():
 
@@ -55,6 +56,15 @@ class OnKeyPress():
 
         self._hz = rospy.get_param('~hz', 10)
 
+        servo_config = rospy.get_param("servos")
+        self.steering_servo = servo_config[1]['servo']
+        self.throttle_servo = servo_config[0]['servo']
+
+        self.servo_pub = rospy.Publisher(
+             'servo_topic',
+             ServoArray,
+             queue_size=1)
+
     def run(self):
         rate = rospy.Rate(self._hz)
         self._running = True
@@ -63,7 +73,7 @@ class OnKeyPress():
                 keycode = self._interface.read_key()
                 if keycode is None:
                     break
-                self._key_pressed(keycode)            
+                self._key_pressed(keycode)
             rate.sleep()
 
     def _key_pressed(self, keycode):
@@ -77,6 +87,7 @@ class OnKeyPress():
         """
         Call for a `stop_servos` service to turn off servos when shutting down
         """
+        self.publish_servo()
         rospy.wait_for_service('stop_servos')
         try:
             stop = rospy.ServiceProxy('stop_servos', StopServos)
@@ -85,6 +96,29 @@ class OnKeyPress():
             rospy.signal_shutdown("stopped motors")
         except rospy.ServiceException as e:
             print("Service call failed: %s"%e)
+
+    def publish_servo(self):
+        """Publish servo or/and throttle as i2cpwm_board.ServoArray message
+
+        Args:
+            cur_throttle (float): current throttle
+            cur_steer (float): current steering
+
+        """    
+        msg = ServoArray()
+
+        serv = Servo()
+        serv.servo = self.throttle_servo
+        serv.value = 0
+        msg.servos.append(serv)
+
+        serv = Servo()
+        serv.servo = self.steering_servo
+        serv.value = 0
+        msg.servos.append(serv)
+        rospy.loginfo(msg)
+        self.servo_pub.publish(msg)
+
 
 def main(stdscr):
     rospy.init_node('stop_car_node', log_level=rospy.INFO)
