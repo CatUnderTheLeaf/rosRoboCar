@@ -19,6 +19,8 @@ class JoyToServoPublisher():
         self.throttle = 0
         self.throttle_servo = servo_config[0]['servo']
         self.throttle_axis = rospy.get_param("axis_linear")
+        # init car with zero values
+        self.publish_servo(self.throttle, self.steering)
 
         self.offset = 0.1
 
@@ -38,6 +40,12 @@ class JoyToServoPublisher():
         rospy.spin()
 
     def config_servos(self, config):
+        """Call to `config_servos` service for use of proportional servo controller
+
+        Args:
+            config: yaml configuration loaded on params server
+
+        """        
         rospy.wait_for_service('config_servos')
         try:
             configure = rospy.ServiceProxy('config_servos', ServosConfig)
@@ -54,32 +62,50 @@ class JoyToServoPublisher():
             print("Service call failed: %s"%e)
 
     def joy_callback(self, data):
+        """Callback on each change in joy message.
+        if throttle or steering are not the same as previous - publish it
+
+        Args:
+            data (sensor_msgs.Joy): joy message
+
+        """    
         if (data.buttons[self.stop_button]==1):
             self.stop()
         else:
-            msg = ServoArray()
-
             cur_throttle = round(data.axes[self.throttle_axis], 2)
-            if (abs(cur_throttle-self.throttle) > self.offset):
-                self.throttle = cur_throttle
-                serv = Servo()
-                serv.servo = self.throttle_servo
-                serv.value = cur_throttle
-                msg.servos.append(serv)
-
             cur_steer = round(data.axes[self.steering_axis], 2)
-            if (abs(cur_steer-self.steering) > self.offset):
-                self.steering = cur_steer
-                serv = Servo()
-                serv.servo = self.steering_servo
-                serv.value = cur_steer
-                msg.servos.append(serv)
-            if (len(msg.servos)>0):
-                self.servo_pub.publish(msg)
+
+            self.publish_servo(cur_throttle, cur_steer)           
+
+    def publish_servo(self, cur_throttle, cur_steer):
+        """Publish servo or/and throttle as i2cpwm_board.ServoArray message
+
+        Args:
+            cur_throttle (float): current throttle
+            cur_steer (float): current steering
+
+        """    
+        msg = ServoArray()
+
+        if (abs(cur_throttle-self.throttle) > self.offset):
+            self.throttle = cur_throttle
+            serv = Servo()
+            serv.servo = self.throttle_servo
+            serv.value = cur_throttle
+            msg.servos.append(serv)
+
+        if (abs(cur_steer-self.steering) > self.offset):
+            self.steering = cur_steer
+            serv = Servo()
+            serv.servo = self.steering_servo
+            serv.value = cur_steer
+            msg.servos.append(serv)
+        if (len(msg.servos)>0):
+            self.servo_pub.publish(msg)
 
     def stop(self):
         """
-        Turn off servos when shutting down
+        Call for a `stop_servos` service to turn off servos when shutting down
         """
         rospy.wait_for_service('stop_servos')
         try:
