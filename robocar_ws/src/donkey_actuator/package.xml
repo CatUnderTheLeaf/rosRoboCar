@@ -9,14 +9,17 @@
   <license>Apache License 2.0</license>
 
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>adafruit_pca9685</build_depend>
+  <build_depend>i2cpwm_board</build_depend>
   <build_depend>geometry_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
   <build_depend>rospy</build_depend>
-  <build_export_depend>adafruit_pca9685</build_export_depend>
+  <build_export_depend>i2cpwm_board</build_export_depend>
   <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
-  <exec_depend>adafruit_pca9685</exec_depend>
+  <exec_depend>i2cpwm_board</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>rospy</exec_depend>
 
 

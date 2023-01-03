@@ -1,6 +1,7 @@
 <launch>
   <arg name="joy_dev" default="/dev/input/js0" />
-  <arg name="config_filepath" default="$(find donkeycar)/config/joy.yaml" />
+  <arg name="config_filepath" default="$(find donkey_actuator)/config/joy.yaml" />
+  <arg name="servos_config" default="$(find donkey_actuator)/config/servos.yaml" />
   <arg name="joy_topic" default="joy" />
   <arg name="servo_topic" default="servos_proportional" />
 
@@ -14,11 +15,11 @@
   </node>
   
   <rosparam command="load" file="$(arg config_filepath)" />
-  <rosparam command="load" file="$(find donkey_actuator)/config/servos.yaml" />
+  <rosparam command="load" file="$(arg servos_config)" />
 
   <!-- when this node shutdowns it takes down all of the other nodes in the launch file  -->
   <!-- to shutdown press L1 button on joystick (button with index=4 in joy message) or whatevere button is in servos.yaml -->
-  <node pkg="donkeycar" name="joy_teleop_node" type="joy_teleop_node.py" output="screen" required="true">    
+  <node pkg="donkey_actuator" name="joy_teleop_node" type="joy_teleop_node.py" output="screen" required="true">    
     <remap from="joy" to="$(arg joy_topic)" />
     <remap from="servo_topic" to="$(arg servo_topic)" />
   </node>
