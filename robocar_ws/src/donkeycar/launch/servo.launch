@@ -1,0 +1,19 @@
+<launch>
+
+    <!-- Steering and throttle of the donkeycar -->
+    <arg name="servos_config" default="$(find donkey_actuator)/config/servos.yaml" />
+    <arg name="servo_topic" default="servos_proportional" />
+    
+    <!-- transform ServoArray to PWM signal -->
+    <node pkg="i2cpwm_board" name="i2cpwm_board_node" type="i2cpwm_board" output="screen" />
+    
+    <!-- transform Twist to ServoArray -->
+    <rosparam command="load" file="$(arg servos_config)" />
+    <node name="donkey_actuator_node" pkg="donkey_actuator" type="donkey_actuator_node.py" output="screen"/>
+
+    <!-- Stop the car and all nodes -->
+    <node pkg="donkey_actuator" name="stop_car" type="stop_car_node.py" output="screen" required="true">
+    </node>
+
+
+</launch>
