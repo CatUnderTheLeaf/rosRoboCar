@@ -1,4 +1,9 @@
 <launch>
+  <!-- include camera launch file 
+    publish image
+    -->
+  <include file="$(find donkeycar)/launch/camera.launch" />
+
   <arg name="joy_dev" default="/dev/input/js0" />
   <arg name="config_filepath" default="$(find donkey_actuator)/config/joy.yaml" />
   <arg name="servos_config" default="$(find donkey_actuator)/config/servos.yaml" />
