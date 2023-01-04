@@ -12,11 +12,11 @@ class JoyToServoPublisher():
         servo_config = rospy.get_param("servos")
         self.config_servos(servo_config)
 
-        self.steering = 0
+        self.steering = -1
         self.steering_servo = servo_config[1]['servo']
         self.steering_axis = rospy.get_param("axis_angular")
 
-        self.throttle = 0
+        self.throttle = -1
         self.throttle_servo = servo_config[0]['servo']
         self.throttle_axis = rospy.get_param("axis_linear")
 
