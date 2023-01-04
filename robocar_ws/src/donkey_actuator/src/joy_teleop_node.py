@@ -36,7 +36,7 @@ class JoyToServoPublisher():
              queue_size=1)
 
         # init car with zero values
-        self.publish_servo(self.throttle, self.steering)
+        self.publish_servo(0, 0)
 
         rospy.spin()
 
