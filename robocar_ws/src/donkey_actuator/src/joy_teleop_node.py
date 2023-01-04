@@ -19,8 +19,6 @@ class JoyToServoPublisher():
         self.throttle = 0
         self.throttle_servo = servo_config[0]['servo']
         self.throttle_axis = rospy.get_param("axis_linear")
-        # init car with zero values
-        self.publish_servo(self.throttle, self.steering)
 
         self.offset = 0.1
 
@@ -36,6 +34,9 @@ class JoyToServoPublisher():
              'servo_topic',
              ServoArray,
              queue_size=1)
+
+        # init car with zero values
+        self.publish_servo(self.throttle, self.steering)
 
         rospy.spin()
 
