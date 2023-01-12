@@ -11,41 +11,43 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
 
 <!-- RUN ON PC WITHOUT CAR -->
   
-    
-    
-    <!-- <node name="republish" pkg="image_transport" type="republish" output="screen">
-      <param name="image_topic" value="/raspicam/image/compressed"/>
-      <param name="info_topic" value="/raspicam/camera_info"/>
-    </node> -->
-  
+    <!-- play a bag with raspicam/image/compressed topic -->
     <node pkg="rosbag" type="play" name="rosbag" required="true" args="$(find path_from_image)/bagfiles/subset5.bag"/>
 
-    <!-- republish to image raw, if needed and rectify image -->
+    <!-- republish to image raw -->
     <node name="republish_compressed_to_raw" pkg="image_transport" type="republish" args="compressed in:=/raspicam/image raw out:=/raspicam/image" />
-    <!-- load mock camera image and info publisher -->
+    
+    <!-- republish image and and add synchronized camerainfo -->
     <arg name="camera_info" default="$(find donkeycar)/config/camera_info.yaml" />
     <rosparam command="load" file="$(arg camera_info)" />
     <node name="republish_image_info" pkg="path_from_image" type="republish_image_info" output="screen"/>
     
-   <group ns="camera">
-    <node name="rectify_image_proc" pkg="image_proc" type="image_proc" output="screen">
-      <param name="image_transport" value="raw"/>
-      <remap from="image_raw" to="image" />
-    </node>
-    <node pkg="image_view" name="image_raw" type="image_view" output="screen">
-    </node>
-    <node pkg="image_view" name="image_rect" type="image_view" output="screen">
-        <remap from="image" to="image_rect_color" />
-    </node>
-    
+    <!-- rectify image, this node takes only raw image as input -->
+    <group ns="camera">
+      <node name="rectify_image_proc" pkg="image_proc" type="image_proc" output="screen">
+        <param name="image_transport" value="raw"/>
+        <remap from="image_raw" to="image" />
+      </node>
+      <!-- view rectified image -->
+      <node pkg="image_view" name="image_rect" type="image_view" output="screen">
+          <remap from="image" to="image_rect_color" />
+      </node>
+      
     
     </group>
+
+    <!-- include lane-keeping launch file -->
+    <include file="$(find donkeycar)/launch/lanekeep.launch" />
+
+
     <!-- Steering and throttle of the donkeycar -->
     <!-- <rosparam command="load" file="$(find donkey_actuator)/config/servos.yaml" />    -->
     <!-- <node name="donkey_actuator_node" pkg="donkey_actuator" type="donkey_actuator_node.py" output="screen"/> -->
     
-    <!-- include lane-keeping launch file -->
-    <!-- <include file="$(find donkeycar)/launch/lanekeep.launch" /> -->
+    <!-- launch RVIZ -->
+    <!-- <arg name="rvizconfig" default="$(find donkeycar)/config/view.rviz" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
 
+    
 
 </launch>

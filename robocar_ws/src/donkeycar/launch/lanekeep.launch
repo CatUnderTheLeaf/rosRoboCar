@@ -10,48 +10,68 @@
 
   </node>
   
+  <arg name="camera_info" default="/camera/camera_info"/>
+  <arg name="rectified_image" default="/camera/image_rect_color/compressed"/>
+  <arg name="warp_image" default="/path/warp_image"/>
+  <arg name="matrix_topic" default="/path/transf_matrix"/>
+  <arg name="lane_image" default="/path/lane_image"/>
+  <arg name="img_waypoints" default="/path/img_waypoints"/>
+
+
+
   <!-- node to get transformation matrix -->
   <node name="trans_matrix_getter" pkg="path_from_image" type="trans_matrix_getter.py" output="screen">
     <param name="_camera_frame" value="camera_link_optical"/>
     <param name="_base_frame" value="base_footprint"/>
     <param name="distance_ahead" value="2.62"/>
     <param name="lane_width" value="3.50"/>
-    <param name="matrix_topic" value="/path/transf_matrix"/>
-    <param name="camera_info" value="/raspicam/camera_info"/>
+    <!-- <param name="distance_ahead" value="1"/>
+    <param name="lane_width" value="1.0"/> -->
+    <param name="matrix_topic" value="$(arg matrix_topic)"/>
+    <param name="camera_info" value="$(arg camera_info)"/>
   </node>
   <!-- test node that warps an image
   to get the right values for lane_width and distance_ahead -->
-  <!-- <node name="image_warper" pkg="path_from_image" type="image_warper.py" output="screen">
-    <param name="image_topic" value="/raspicam/image/compressed"/>
-    <param name="warp_image" value="/path/warp_image/compressed"/>
-    <param name="matrix_topic" value="/path/transf_matrix"/>
-  </node> -->
+  <node name="image_warper" pkg="path_from_image" type="image_warper.py" output="screen">
+    <param name="image_topic" value="$(arg rectified_image)"/>
+    <param name="warp_image" value="$(arg warp_image)/compressed"/>
+    <param name="matrix_topic" value="$(arg matrix_topic)"/>
+  </node>
+  <node pkg="image_view" name="image_warp" type="image_view" output="screen">
+    <param name="image_transport" value="compressed"/>
+    <remap from="image" to="$(arg warp_image)" />
+  </node>
+  
   <!-- node to draw a lane area over an image -->
   <node name="lane_area_drawer" pkg="path_from_image" type="lane_area_drawer.py" output="screen">
-    <param name="image_topic" value="/raspicam/image_rect_color/compressed"/>
-    <param name="info_topic" value="/raspicam/camera_info"/>
-    <param name="lane_image" value="/path/lane_image/compressed"/>
-    <param name="matrix_topic" value="/path/transf_matrix"/>
-    <param name="img_waypoints" value="/path/img_waypoints"/>
+    <param name="image_topic" value="$(arg rectified_image)"/>
+    <param name="info_topic" value="$(arg camera_info)"/>
+    <param name="lane_image" value="$(arg lane_image)/compressed"/>
+    <param name="matrix_topic" value="$(arg matrix_topic)"/>
+    <param name="img_waypoints" value="$(arg img_waypoints)"/>
+  </node>
+  <node pkg="image_view" name="image_rect" type="image_view" output="screen">
+    <param name="image_transport" value="compressed"/>
+    <remap from="image" to="$(arg lane_image)" />
   </node>
 
 <!-- img points to path in robots frame -->
-  <node name="path_publisher" pkg="path_from_image" type="path_publisher.py" output="screen">
+  <!-- <node name="path_publisher" pkg="path_from_image" type="path_publisher.py" output="screen">
     <param name="info_topic" value="/raspicam/camera_info"/>
     <param name="img_waypoints" value="/path/img_waypoints"/>
     <param name="path_waypoints" value="/path/path_waypoints"/>
     <param name="_camera_frame" value="camera_link_optical"/>
     <param name="_base_frame" value="base_footprint"/>
-  </node>
+  </node> -->
 
     <!-- path to cmd_vel -->
-  <node name="controller_node" pkg="controller" type="controller_node.py" output="screen">
+  <!-- <node name="controller_node" pkg="controller" type="controller_node.py" output="screen">
       <param name="kp" value="4.0"/>
       <param name="ki" value="0.01"/>
       <param name="kd" value="0.0"/>
       <param name="velocity" value="0.5"/>
       <param name="path_waypoints" value="/path/path_waypoints"/>
-  </node>
+  </node> -->
 
   
 </launch>

@@ -28,15 +28,22 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
       <param name="image_transport" value="raw"/>
       <remap from="image_raw" to="image" />
     </node>
-    <!-- <node pkg="image_view" name="image_raw" type="image_view" output="screen">
+    <node pkg="image_view" name="image_raw" type="image_view" output="screen">
     </node>
     <node pkg="image_view" name="image_rect" type="image_view" output="screen">
         <remap from="image" to="image_rect_color" />
-    </node> -->
+    </node>
+    
     </group>
     <!-- include lane-keeping launch file -->
     <include file="$(find donkeycar)/launch/lanekeep.launch" />
 
+    <node pkg="image_view" name="image_rect" type="image_view" output="screen">
+      <param name="image_transport" value="compressed"/>
+        <remap from="image" to="path/lane_image" />
+    </node>
+
+   
     <!-- launch RVIZ -->
     <!-- <arg name="rvizconfig" default="$(find donkeycar)/config/view.rviz" />
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
