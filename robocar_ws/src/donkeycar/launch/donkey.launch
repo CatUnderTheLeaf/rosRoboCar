@@ -5,11 +5,11 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
 export ROS_IP=192.168.0.133
 export ROS_MASTER_URI=http://192.168.0.51:11311/
 
-export ROS_IP=10.65.0.56
-export ROS_MASTER_URI=http://10.65.0.56:11311/
+export ROS_IP=10.65.0.221
+export ROS_MASTER_URI=http://10.65.0.221:11311/
 
-export ROS_IP=10.65.0.72
-export ROS_MASTER_URI=http://10.65.0.56:11311/
+export ROS_IP=10.65.0.224
+export ROS_MASTER_URI=http://10.65.0.221:11311/
  -->
 
 <launch>

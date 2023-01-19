@@ -1,0 +1,25 @@
+<launch>
+ <!-- play a bag with raspicam/image/compressed topic -->
+ <!-- subset 3, 2, 0, 4, 5, 1-->
+  <node pkg="rosbag" type="play" name="rosbag" required="true" args="$(find path_from_image)/bagfiles/subset1.bag"/>
+
+    <!-- republish to image raw -->
+  <node name="republish_compressed_to_raw" pkg="image_transport" type="republish" args="compressed in:=/raspicam/image raw out:=/raspicam/image" />
+
+  <!-- republish image and and add synchronized camerainfo -->
+    <arg name="camera_info" default="$(find donkeycar)/config/camera_info.yaml" />
+    <rosparam command="load" file="$(arg camera_info)" />
+    <node name="republish_image_info" pkg="path_from_image" type="republish_image_info" output="screen"/>
+    
+    <!-- rectify image, this node takes only raw image as input -->
+    <group ns="camera">
+      <node name="rectify_image_proc" pkg="image_proc" type="image_proc" output="screen">
+        <param name="image_transport" value="raw"/>
+        <remap from="image_raw" to="image" />
+      </node>
+    </group>
+
+  <node name="extract" pkg="image_view" type="extract_images" respawn="false" required="true" output="screen" cwd="ROS_HOME">
+    <remap from="image" to="/camera/image_rect_color"/>
+  </node>
+</launch>
