@@ -43,7 +43,7 @@
   </node> -->
   
   <!-- node to draw a lane area over an image -->
-  <node name="lane_area_drawer" pkg="path_from_image" type="lane_area_drawer.py" output="screen">
+  <node name="lane_drawer" pkg="path_from_image" type="lane_drawer.py" output="screen">
     <param name="image_topic" value="$(arg rectified_image)"/>
     <param name="info_topic" value="$(arg camera_info)"/>
     <param name="lane_image" value="$(arg lane_image)/compressed"/>
