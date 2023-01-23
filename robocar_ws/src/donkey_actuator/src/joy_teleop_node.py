@@ -87,7 +87,7 @@ class JoyToServoPublisher():
 
         """    
         msg = ServoArray()
-
+        rospy.loginfo(f"throttle {cur_throttle} and init {self.throttle}")
         if (abs(cur_throttle-self.throttle) > self.offset):
             self.throttle = cur_throttle
             serv = Servo()
@@ -102,6 +102,7 @@ class JoyToServoPublisher():
             serv.value = cur_steer
             msg.servos.append(serv)
         if (len(msg.servos)>0):
+            rospy.loginfo(msg)
             self.servo_pub.publish(msg)
 
     def stop(self):

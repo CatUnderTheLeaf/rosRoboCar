@@ -40,11 +40,11 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
 
     <!-- include lane-keeping launch file -->
     <include file="$(find donkeycar)/launch/lanekeep.launch" />
+    <node pkg="image_view" name="image_rect" type="image_view" output="screen">
+      <param name="image_transport" value="compressed"/>
+      <remap from="image" to="$(arg lane_image)" />
+    </node>
 
-    <!-- Steering and throttle of the donkeycar -->
-    <!-- <rosparam command="load" file="$(find donkey_actuator)/config/servos.yaml" />    -->
-    <!-- <node name="donkey_actuator_node" pkg="donkey_actuator" type="donkey_actuator_node.py" output="screen"/> -->
-    
     <!-- launch RVIZ -->
     <arg name="rvizconfig" default="$(find donkeycar)/config/view.rviz" />
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />

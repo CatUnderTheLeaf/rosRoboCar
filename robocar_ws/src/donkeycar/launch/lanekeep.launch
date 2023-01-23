@@ -18,10 +18,7 @@
   <arg name="img_waypoints" default="/path/img_waypoints"/>
   <arg name="path_waypoints" default="/path/path_waypoints"/>
 
-  <node pkg="image_view" name="image_rect" type="image_view" output="screen">
-    <param name="image_transport" value="compressed"/>
-    <remap from="image" to="$(arg lane_image)" />
-  </node>
+  
 
 <!-- img points to path in robots frame -->
   <node name="path_publisher" pkg="path_from_image" type="path_publisher.py" output="screen">
@@ -33,13 +30,13 @@
   </node>
 
     <!-- path to cmd_vel -->
-  <!-- <node name="controller_node" pkg="controller" type="controller_node.py" output="screen">
+  <node name="controller_node" pkg="controller" type="controller_node.py" output="screen">
       <param name="kp" value="4.0"/>
       <param name="ki" value="0.01"/>
       <param name="kd" value="0.0"/>
       <param name="velocity" value="0.5"/>
       <param name="path_waypoints" value="/path/path_waypoints"/>
-  </node> -->
+  </node>
 
   
 </launch>
