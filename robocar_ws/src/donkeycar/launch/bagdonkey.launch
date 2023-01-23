@@ -36,9 +36,10 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
     
     </group>
 
+    <!-- lane detection is launched in another launch file in cmd -->
+
     <!-- include lane-keeping launch file -->
     <include file="$(find donkeycar)/launch/lanekeep.launch" />
-
 
     <!-- Steering and throttle of the donkeycar -->
     <!-- <rosparam command="load" file="$(find donkey_actuator)/config/servos.yaml" />    -->

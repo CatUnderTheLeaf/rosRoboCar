@@ -18,38 +18,6 @@
   <arg name="img_waypoints" default="/path/img_waypoints"/>
   <arg name="path_waypoints" default="/path/path_waypoints"/>
 
-
-
-  <!-- node to get transformation matrix -->
-  <!-- <node name="trans_matrix_getter" pkg="path_from_image" type="trans_matrix_getter.py" output="screen">
-    <param name="_camera_frame" value="camera_link_optical"/>
-    <param name="_base_frame" value="base_footprint"/>
-    <param name="distance_ahead" value="2.62"/>
-    <param name="lane_width" value="3.50"/>
-    <param name="matrix_topic" value="$(arg matrix_topic)"/>
-    <param name="camera_info" value="$(arg camera_info)"/>
-  </node> -->
-
-  <!-- test node that warps an image
-  to get the right values for lane_width and distance_ahead -->
-  <!-- <node name="image_warper" pkg="path_from_image" type="image_warper.py" output="screen">
-    <param name="image_topic" value="$(arg rectified_image)"/>
-    <param name="warp_image" value="$(arg warp_image)/compressed"/>
-    <param name="matrix_topic" value="$(arg matrix_topic)"/>
-  </node>
-  <node pkg="image_view" name="image_warp" type="image_view" output="screen">
-    <param name="image_transport" value="compressed"/>
-    <remap from="image" to="$(arg warp_image)" />
-  </node> -->
-  
-  <!-- node to draw a lane area over an image -->
-  <node name="lane_drawer" pkg="path_from_image" type="lane_drawer.py" output="screen">
-    <param name="image_topic" value="$(arg rectified_image)"/>
-    <param name="info_topic" value="$(arg camera_info)"/>
-    <param name="lane_image" value="$(arg lane_image)/compressed"/>
-    <param name="matrix_topic" value="$(arg matrix_topic)"/>
-    <param name="img_waypoints" value="$(arg img_waypoints)"/>
-  </node>
   <node pkg="image_view" name="image_rect" type="image_view" output="screen">
     <param name="image_transport" value="compressed"/>
     <remap from="image" to="$(arg lane_image)" />
