@@ -116,7 +116,7 @@ class OnKeyPress():
         serv.servo = self.steering_servo
         serv.value = 0
         msg.servos.append(serv)
-        rospy.loginfo(msg)
+        rospy.logdebug(msg)
         self.servo_pub.publish(msg)
 
 

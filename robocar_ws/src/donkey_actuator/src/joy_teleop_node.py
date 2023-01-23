@@ -87,7 +87,7 @@ class JoyToServoPublisher():
 
         """    
         msg = ServoArray()
-        rospy.loginfo(f"throttle {cur_throttle} and init {self.throttle}")
+        rospy.logdebug(f"throttle {cur_throttle} and init {self.throttle}")
         if (abs(cur_throttle-self.throttle) > self.offset):
             self.throttle = cur_throttle
             serv = Servo()
@@ -102,7 +102,7 @@ class JoyToServoPublisher():
             serv.value = cur_steer
             msg.servos.append(serv)
         if (len(msg.servos)>0):
-            rospy.loginfo(msg)
+            rospy.logdebug(msg)
             self.servo_pub.publish(msg)
 
     def stop(self):
@@ -113,7 +113,7 @@ class JoyToServoPublisher():
         try:
             stop = rospy.ServiceProxy('stop_servos', StopServos)
             stop()
-            rospy.loginfo("stopped")
+            rospy.logdebug("stopped")
             rospy.signal_shutdown("stopped motors")
         except rospy.ServiceException as e:
             print("Service call failed: %s"%e)

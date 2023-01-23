@@ -70,7 +70,7 @@ class DonkeyActuator():
         """            
         cur_throttle = round(data.linear.x, 2)
         cur_steer = round(data.angular.z, 2)
-        rospy.loginfo(f"throttle {cur_throttle}, steering {cur_steer}")
+        rospy.logdebug(f"throttle {cur_throttle}, steering {cur_steer}")
         self.publish_servo(cur_throttle, cur_steer)           
 
     def publish_servo(self, cur_throttle, cur_steer):
@@ -97,7 +97,7 @@ class DonkeyActuator():
             serv.value = cur_steer
             msg.servos.append(serv)
         if (len(msg.servos)>0):
-            rospy.loginfo(msg)
+            rospy.logdebug(msg)
             self.servo_pub.publish(msg)
 
 def main(args):

@@ -42,7 +42,7 @@ export ROS_MASTER_URI=http://192.168.0.51:11311/
     <include file="$(find donkeycar)/launch/lanekeep.launch" />
     <node pkg="image_view" name="image_rect" type="image_view" output="screen">
       <param name="image_transport" value="compressed"/>
-      <remap from="image" to="$(arg lane_image)" />
+      <remap from="image" to="/path/lane_image" />
     </node>
 
     <!-- launch RVIZ -->
