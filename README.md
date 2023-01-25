@@ -35,6 +35,7 @@ Currently on PC without a car a bagfile can be used.
 source devel/setup.bash
 
 # launch bag-play, image-view and rviz
+# to change bag-file just edit src/donkeycar/launch/bagdonkey.launch file
 roslaunch donkeycar bagdonkey.launch
 
 # in separate terminal 
