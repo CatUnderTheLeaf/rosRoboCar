@@ -11,7 +11,42 @@ Robocar uses ROS1 Noetic and [DonkeyCar](https://docs.donkeycar.com/). For testi
   * Throttle
   * Steering
 
-### Setup
+### Run on PC
+
+Currently on PC without a car a bagfile can be used.
+
+1. [Install](https://github.com/CatUnderTheLeaf/rosRoboCar/wiki/Installation) on PC
+
+2. Download [bagfiles](https://drive.google.com/drive/folders/1vaq_QgQXcNmLYTS5K2Qk5rRrib_qC0az?usp=share_link) directory to `robocar_ws/src/path_from_image`
+
+3. Install tensorflow 2.2 (not the latest) with `pip install tensorflow==2.2`
+
+4. For GPU acceleration also install [CUDA Toolkit 10.1](https://developer.nvidia.com/cuda-10.1-download-archive-base) and [CuDNN](https://developer.nvidia.com/rdp/cudnn-archive). Unzip to a suitable location and copy files to corresponding folders in `NVIDIA GPU Computing Toolkit\CUDA\v10.1` Check with `python -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"`
+
+5. I could possibly forget some dependancies to be installed, like `scikit-learn` etc.
+
+6. Make all `.py` files executable. (Some files could be commited from Windows PC)
+
+7. Add empty `CATKIN_IGNORE` file to `raspicam_node` so it will be not build
+
+8. Launch in `robocar_ws`
+```
+# make sure catkin_make was executed prior
+source devel/setup.bash
+
+# launch bag-play, image-view and rviz
+roslaunch donkeycar bagdonkey.launch
+
+# in separate terminal 
+source devel/setup.bash
+# and launch lane detection, which needs GPU acceleration
+roslaunch donkeycar lanedetect.launch
+```
+
+---
+### To be updated later...
+
+### Steps to make a car
 
 1. [Installation](https://github.com/CatUnderTheLeaf/rosRoboCar/wiki/Installation) on PC and on a car
 
@@ -64,19 +99,3 @@ Robocar uses ROS1 Noetic and [DonkeyCar](https://docs.donkeycar.com/). For testi
 ### TF frames tree
 
 ![frames](https://github.com/CatUnderTheLeaf/rosRoboCar/blob/main/additional_files/tf_frames.jpg)
-
-### Launch
-
-On PC
-```
-# mock camera will publish only one image with 30Hz rate
-roslaunch donkeycar donkey.launch simulation:=1
-
-# to play recorded bag
-roslaunch donkeycar donkey.launch simulation:=1 playbag:=1
-```
-
-On a car
-```
-roslaunch donkeycar donkey.launch simulation:=0
-```
