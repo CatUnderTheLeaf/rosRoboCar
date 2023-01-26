@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+  <!-- Robot pose -->
+  <arg name="x" default="-1"/>
+  <arg name="y" default="-3.5"/>
+  <arg name="z" default="0.02"/>
+  <arg name="roll" default="0"/>
+  <arg name="pitch" default="0"/>
+  <arg name="yaw" default="0"/>
+
+<!-- Find car Description-->
+  <arg name="model" default="$(find donkeycar)/config/car.gazebo"/>
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+  
+<!-- Spawn My Robot -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
+        args="-urdf -param robot_description -model robocar 
+              -x $(arg x) -y $(arg y) -z $(arg z)
+              -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
+
+<!-- Publish TF messages from URDF -->
+  <node type="joint_state_publisher" pkg="joint_state_publisher" name="joint_state_publisher" output="screen">
+  </node>
+  <node type="robot_state_publisher" pkg="robot_state_publisher" name="robot_state_publisher" output="screen">
+  </node>
+
+</launch>
