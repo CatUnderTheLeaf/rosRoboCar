@@ -22,25 +22,22 @@ limitations under the License.
 
 
 <robot name="robocar" xmlns:xacro="http://www.ros.org/wiki/xacro">
-
-<!-- MACROS AND PROPERTIES -->
-
   <!-- Degree-to-radian conversions -->
   <xacro:property name="degrees_45" value="0.785398163"/>
   <xacro:property name="degrees_90" value="1.57079633"/>
 
   <!-- chassis_length is measured along the x axis, chassis_width
        along the y axis, and chassis_height along the z axis. -->
-  <xacro:property name="chassis_length" value="0.255"/>
-  <xacro:property name="chassis_width" value="0.1"/>
-  <xacro:property name="chassis_height" value="0.034"/>
-  <xacro:property name="chassis_mass" value="1.079"/>
+  <xacro:property name="chassis_length" value="0.40"/>
+  <xacro:property name="chassis_width" value="0.15"/>
+  <xacro:property name="chassis_height" value="0.01"/>
+  <xacro:property name="chassis_mass" value="2.788"/>
 
   <!-- hub_dia and tire_dia are the diameters of the hub and tire,
        respectively. -->
-  <xacro:property name="hub_dia" value="0.01"/>
-  <xacro:property name="tire_dia" value="0.075"/>
-  <xacro:property name="tire_width" value="0.04"/>
+  <xacro:property name="hub_dia" value="0.7"/>
+  <xacro:property name="tire_dia" value="0.10"/>
+  <xacro:property name="tire_width" value="0.05"/>
 
   <xacro:property name="wheel_mass" value="0.29"/>
 
@@ -48,10 +45,10 @@ limitations under the License.
        the shock absorbers are fully extended. axle_length is the distance
        from a U joint to the corresponding hex hub. wheel_travel is the
        vertical wheel travel. -->
-  <xacro:property name="wheelbase" value="0.175"/>
-  <xacro:property name="hex_hub_dist" value="0.145"/>
-  <xacro:property name="axle_length" value="0.055"/>
-  <xacro:property name="wheel_travel" value="0.04"/>
+  <xacro:property name="wheelbase" value="0.30"/>
+  <xacro:property name="hex_hub_dist" value="0.33"/>
+  <xacro:property name="axle_length" value="0.03"/>
+  <xacro:property name="wheel_travel" value="0.084"/>
   <xacro:property name="shock_z_offset" value="0.0655"/>
 
   <!-- hex_hub_depth is the distance that the hex hub is
@@ -146,7 +143,7 @@ limitations under the License.
 
       <origin xyz="${fr_reflect * wheelbase / 2}
                    ${lr_reflect * ((hex_hub_dist / 2) - axle_length)}
-                   ${-(chassis_height) / 2}"/>
+                   ${(wheel_travel / 2) - shock_z_offset}"/>
       <axis xyz="0 0 -1"/>
       <limit lower="${-wheel_travel / 2}" upper="${wheel_travel / 2}"
              effort="${shock_eff_limit}" velocity="${shock_vel_limit}"/>
@@ -192,8 +189,9 @@ limitations under the License.
     <link name="${lr_prefix}_${fr_prefix}_wheel">
       <visual>
         <origin xyz="0
-                     0
-                     ${lr_reflect * (axle_length + tire_width/2 + 0.02)}"/>
+                     ${lr_reflect * (axle_length - (tire_width / 
+                     2 - hex_hub_depth))}
+                     0"/>
         <geometry>
           <cylinder radius="${tire_dia / 2}" length="${tire_width}"/>
         </geometry>
@@ -202,8 +200,9 @@ limitations under the License.
 
       <collision>
         <origin xyz="0
-                     0
-                     ${lr_reflect * (axle_length + tire_width/2 + 0.02)}"/>
+                     ${lr_reflect * (axle_length - (tire_width / 
+                     2 - hex_hub_depth))}
+                     0"/>
         <geometry>
           <cylinder radius="${tire_dia / 2}" length="${tire_width}"/>
         </geometry>
@@ -230,7 +229,6 @@ limitations under the License.
       <xacro:null_inertial/>
     </link>
 
-    <!-- <joint name="${lr_prefix}_steering_joint" type="fixed"> -->
     <joint name="${lr_prefix}_steering_joint" type="revolute">
       <parent link="${lr_prefix}_steering_link"/>
       <child link="${lr_prefix}_${fr_prefix}_axle_carrier"/>
@@ -264,22 +262,8 @@ limitations under the License.
                  lr_reflect="${lr_reflect}"/>
   </xacro:macro>
 
-<!-- END OF MACROS AND PROPERTIES -->
-
-
-<!-- CAR MODEL -->
-
-  <!-- projection of base_link to the ground -->
-  <link name="base_footprint">    
-  </link>
-  <joint type="fixed" name="base_to_bottom_joint">
-    <origin xyz="0 0 ${(chassis_height + tire_dia) / 2}" rpy="0 0 0"/>
-    <child link="base_link"/>
-    <parent link="base_footprint"/>
-  </joint>
-
   <!-- base_link must have geometry so that its axes can be displayed in
-       rviz. --> 
+       rviz. -->
   <link name="base_link">
     <visual>
       <geometry>
@@ -295,7 +279,7 @@ limitations under the License.
   <!-- Chassis -->
   <link name="chassis">
     <visual>
-      <origin xyz="0 0 0"/>
+      <origin xyz="0 0 ${-chassis_height / 2}"/>
       <geometry>
         <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
       </geometry>
@@ -303,7 +287,7 @@ limitations under the License.
     </visual>
 
     <collision>
-      <origin xyz="0 0 0"/>
+      <origin xyz="0 0 ${-chassis_height / 2}"/>
       <geometry>
         <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
       </geometry>
@@ -312,7 +296,7 @@ limitations under the License.
     <xacro:solid_cuboid_inertial
         width="${chassis_length}" depth="${chassis_width}"
         height="${chassis_height}" mass="${chassis_mass}">
-      <origin xyz="0 0 0"/>
+      <origin xyz="0 0 ${-chassis_height / 2}"/>
     </xacro:solid_cuboid_inertial>
   </link>
   <gazebo reference="chassis">
@@ -329,58 +313,116 @@ limitations under the License.
   <xacro:rear_wheel lr_prefix="left" fr_prefix="rear" lr_reflect="1" fr_reflect="-1"/>
   <xacro:rear_wheel lr_prefix="right" fr_prefix="rear" lr_reflect="-1" fr_reflect="-1"/>
 
+  <!-- camera -->
+  <gazebo reference="camera">
+    <sensor type="camera" name="camera1">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.19</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>720</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>10</far>
+        </clip>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera</cameraName>
+        <imageTopicName>color/image_raw</imageTopicName>
+        <cameraInfoTopicName>color/camera_info</cameraInfoTopicName>
+        <!-- camera frame with Z forward -->
+        <frameName>camera_link_optical</frameName>
+        <!-- 286. TODO camera matrix as in file, two numbers left-->
+        <focalLength>944.023585</focalLength>
+        <CxPrime>641.408166</CxPrime>
+        <Cx>641.408166</Cx>
+        <Cy>397.025688</Cy>
+        <distortionK1>0.085703</distortionK1>
+        <distortionK2>-0.139378</distortionK2>
+        <distortionK3>0.005161</distortionK3>
+        <distortionT1>0.000282</distortionT1>
+        <distortionT2>0.000000</distortionT2>
+      </plugin>
+    </sensor>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+
   <!-- CAMERA -->
-    <link name="sensors">
-    </link>
-    <joint name="sensor_joint" type="fixed">
-      <parent link="chassis"/>
-      <child link="sensors"/>
-    </joint>
+  <link name="camera"> 
+    <inertial>
+      <mass value="0.001"/>
+      <origin xyz="0 0 0" rpy=" 0 0 0"/>
+      <inertia
+          ixx="1e-6" ixy="0" ixz="0"
+          iyy="1e-6" iyz="0"
+          izz="1e-6"
+      />
+    </inertial>
 
-    <link name="front_camera_sensor">
-      <inertial>
-        <mass value="0.001"/>
-        <origin xyz="0 0 0" rpy=" 0 0 0"/>
-        <inertia
-            ixx="1e-6" ixy="0" ixz="0"
-            iyy="1e-6" iyz="0"
-            izz="1e-6"
-        />
-      </inertial>
+    <collision name='camera_collision'>
+      <origin xyz="0 0 0" rpy=" 0 0 0"/> 
+      <geometry>
+        <box size="0.05 0.05 0.05"/>
+      </geometry>
+    </collision>
 
-      <collision name='camera_collision'>
-        <origin xyz="0 0 0" rpy=" 0 0 0"/> 
-        <geometry>
-          <box size="0.05 0.05 0.05"/>
-        </geometry>
-      </collision>
+    <visual name='camera_visual'>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.05"/>
+      </geometry>
+    </visual>
+  </link>
 
-      <visual name='camera_visual'>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <box size="0.05 0.05 0.05"/>
-        </geometry>
-      </visual>
-    </link>
-
-    <joint name="camera_joint" type="fixed">   
-        <origin xyz="0.07 0 0.148" rpy="0 0.296706 0"/>
-        <parent link="sensors"/>
-        <child link="front_camera_sensor"/>
-    </joint>
+  <joint type="fixed" name="camera_joint">
+    <origin xyz="0.2 0 ${0.36}" rpy="0 0 0"/>
+    <child link="camera"/>
+    <parent link="chassis"/>
+  </joint>
 
   <!-- generate an optical frame 
       http://www.ros.org/reps/rep-0103.html#suffix-frames
       so that ros and opencv can operate on the camera frame correctly 
       -->
-    <link name="camera_link_optical">
-    </link>
-    <joint name="camera_optical_joint" type="fixed">   
-        <origin xyz="0 0 0" rpy="${-degrees_90} 0 ${-degrees_90}"/>
-        <parent link="front_camera_sensor"/>
-        <child link="camera_link_optical"/>
-    </joint>
+  <joint name="camera_optical_joint" type="fixed">   
+    <origin xyz="0 0 0" rpy="${-degrees_90} 0 ${-degrees_90}"/>
+    <parent link="camera"/>
+    <child link="camera_link_optical"/>
+  </joint>
+
+  <link name="camera_link_optical">
+  </link>
 
 
+  <!-- CAMERA END -->
 
+  <!-- projection of base_link to the ground -->
+  <link name="base_bottom_link">    
+  </link>
+  <joint type="fixed" name="base_to_bottom_joint">
+    <origin xyz="0 0 ${(chassis_height + wheel_travel + tire_dia) / 2}" rpy="0 0 0"/>
+    <child link="base_link"/>
+    <parent link="base_bottom_link"/>
+  </joint>
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
+    <!-- publish ground truth into odometry topic -->
+    <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>50.0</updateRate>
+      <bodyName>base_link</bodyName>
+      <topicName>robocar/odometry</topicName>
+      <gaussianNoise>0.01</gaussianNoise>
+      <frameName>base_link</frameName>
+      <xyzOffsets>0 0 0</xyzOffsets>
+      <rpyOffsets>0 0 0</rpyOffsets>
+    </plugin>
+  </gazebo>
 </robot>

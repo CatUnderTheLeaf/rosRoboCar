@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <launch>
-  <!-- Robot pose -->
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <!-- <node name="rviz" pkg="rviz" type="rviz" required="true" args="-d $(find ackermann_steering_controller)/test/common/rviz/display.rviz"/> -->
+
+
+  <arg name="model" default="$(find donkeycar)/config/car2.xacro"/>
+  <arg name="joint_params" default="$(find donkeycar)/config/em_3905_joint_ctrlr_params.yaml"/>
+  <arg name="ackermann_params" default="$(find donkeycar)/config/em_3905_ackermann_ctrlr_params.yaml"/>
+  
+<!-- Robot pose -->
   <arg name="x" default="-1"/>
   <arg name="y" default="-3.5"/>
   <arg name="z" default="0.02"/>
@@ -10,7 +20,6 @@
   <arg name="yaw" default="0"/>
 
 <!-- Find car Description-->
-  <arg name="model" default="$(find donkeycar)/config/car.gazebo"/>
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
   
 <!-- Spawn My Robot -->
@@ -18,11 +27,21 @@
         args="-urdf -param robot_description -model robocar 
               -x $(arg x) -y $(arg y) -z $(arg z)
               -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
+  
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+    args="$(arg joint_params)" output="screen"/>
+  
+  <!-- Control the steering, axle, and shock absorber joints. -->
+  <arg name="cmd_timeout" default="0.5"/>
+  <node name="ackermann_controller" pkg="donkeycar"
+        type="ackermann_controller.py"
+        output="screen">
+        <remap from="drive" to="donkey/drive" />
+    <param name="cmd_timeout" value="$(arg cmd_timeout)"/>
+    <rosparam file="$(arg ackermann_params)" command="load"/>
+  </node>
 
-<!-- Publish TF messages from URDF -->
-  <node type="joint_state_publisher" pkg="joint_state_publisher" name="joint_state_publisher" output="screen">
-  </node>
-  <node type="robot_state_publisher" pkg="robot_state_publisher" name="robot_state_publisher" output="screen">
-  </node>
 
 </launch>
+
+<!-- rostopic pub -1 /donkey/drive geometry_msgs/Twist "{linear: [0.35, 0.0, 0.0], angular: [0.0, 0.0, 0.0]}" -->
